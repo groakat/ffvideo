@@ -68,6 +68,8 @@ cdef extern from "libavcodec/avcodec.h":
         AVSEEK_FLAG_BACKWARD = 1 #< seek backward
         AVSEEK_FLAG_BYTE     = 2 #< seeking based on position in bytes
         AVSEEK_FLAG_ANY      = 4 #< seek to any frame, even non keyframes
+        AVSEEK_FLAG_FRAME    = 8 #< seeking based on frame number
+
         CODEC_CAP_TRUNCATED = 0x0008
         CODEC_FLAG_TRUNCATED = 0x00010000 # input bitstream might be truncated at a random location instead of only at frame boundaries
         AV_TIME_BASE = 1000000

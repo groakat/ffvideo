@@ -43,6 +43,11 @@ FAST_BILINEAR = SWS_FAST_BILINEAR
 BILINEAR = SWS_BILINEAR
 BICUBIC = SWS_BICUBIC
 
+SEEK_BACKWARD = AVSEEK_FLAG_BACKWARD    #< seek backward
+SEEK_BYTE = AVSEEK_FLAG_BYTE            #< seeking based on position in bytes
+SEEK_ANY = AVSEEK_FLAG_ANY              #< seek to any frame, even non keyframes
+SEEK_FRAME = AVSEEK_FLAG_FRAME          #< seeking based on frame number
+
 
 FRAME_MODES = {
     'RGB': PIX_FMT_RGB24,
@@ -82,6 +87,8 @@ cdef class VideoStream:
     cdef readonly int frame_height
 
     cdef public int scale_mode
+    cdef public int seek_mode
+    cdef public int exact_seek
 
     property frame_mode:
         def __set__(self, mode):
@@ -116,7 +123,7 @@ cdef class VideoStream:
             return (self.frame_width, self.frame_height)
 
     def __cinit__(self, filename, frame_size=None, frame_mode='RGB',
-                  scale_mode=BICUBIC):
+                  scale_mode=BICUBIC, seek_mode=SEEK_BACKWARD, exact_seek=False):
         self.format_ctx = NULL
         self.codec_ctx = NULL
         self.frame = avcodec_alloc_frame()
@@ -127,7 +134,7 @@ cdef class VideoStream:
         self.streamno = -1
 
     def __init__(self, filename, frame_size=None, frame_mode='RGB',
-                 scale_mode=BICUBIC):
+                 scale_mode=BICUBIC, seek_mode=SEEK_BACKWARD, exact_seek=False):
         cdef int ret
         cdef int i
 
@@ -135,6 +142,8 @@ cdef class VideoStream:
 
         self.frame_mode = frame_mode
         self.scale_mode = scale_mode
+        self.seek_mode = seek_mode
+        self.exact_seek = exact_seek
 
         ret = avformat_open_input(&self.format_ctx, filename, NULL, NULL)
         if ret != 0:
@@ -310,7 +319,7 @@ cdef class VideoStream:
         stream_pts = av_rescale_q(pts, AV_TIME_BASE_Q, self.stream.time_base) + \
                     self.stream.start_time
         ret = av_seek_frame(self.format_ctx, self.streamno, stream_pts,
-                            AVSEEK_FLAG_BACKWARD)
+                            self.seek_mode)
         if ret < 0:
             raise FFVideoError("Unable to seek: %d" % ret)
         avcodec_flush_buffers(self.codec_ctx)
@@ -329,12 +338,20 @@ cdef class VideoStream:
         self.codec_ctx.skip_idct = AVDISCARD_DEFAULT
         self.codec_ctx.skip_frame = AVDISCARD_DEFAULT
 
+
+        print("--------------------", self.stream.index, self.stream.cur_dts, self.stream.id, stream_pts)
+
+        if self.exact_seek:
+            while self.stream.cur_dts < stream_pts + 9:
+                print("-------------------- looping to", stream_pts, self.stream.cur_dts)
+                self.__next__()
+
         return self.current()
 
     def __iter__(self):
         # rewind
         ret = av_seek_frame(self.format_ctx, self.streamno,
-                            self.stream.start_time, AVSEEK_FLAG_BACKWARD)
+                            self.stream.start_time, self.seek_mode)
         if ret < 0:
             raise FFVideoError("Unable to rewind: %d" % ret)
         avcodec_flush_buffers(self.codec_ctx)

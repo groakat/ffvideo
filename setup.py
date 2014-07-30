@@ -1,4 +1,5 @@
 import os
+import platform
 from distutils.core import setup, Extension
 
 try:
@@ -14,6 +15,13 @@ def read(fn):
 
 VERSION = "0.0.13"
 
+if platform.system() == 'Linux':
+    include_dirs = ["/usr/include/ffmpeg"]
+    library_dirs = []
+elif platform.system() == 'Darwin':
+    include_dirs = ['/usr/local/Cellar/ffmpeg/2.3/include/']
+    library_dirs = ['/usr/local/Cellar/ffmpeg/2.3/lib/']
+
 setup(
     name="FFVideo",
     version=VERSION,
@@ -21,8 +29,9 @@ setup(
     long_description=read("README.txt"),
     ext_modules=[
         Extension("ffvideo", sources,
-                  include_dirs=["/usr/include/ffmpeg"],
-                  libraries=["avformat", "avcodec", "swscale"])
+                  include_dirs=include_dirs,
+                  libraries=["avformat", "avcodec", "swscale"],
+                  library_dirs=library_dirs)
     ],
     cmdclass=cmdclass,
     author="Zakhar Zibarov",

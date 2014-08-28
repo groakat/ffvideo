@@ -22,8 +22,8 @@ elif platform.system() == 'Darwin':
     include_dirs = ['/usr/local/Cellar/ffmpeg/2.3/include/']
     library_dirs = ['/usr/local/Cellar/ffmpeg/2.3/lib/']
 else:
-    include_dirs = [r'G:\peter\ffmpeg-20140827-git-9e8ab36-win64-dev\include']
-    library_dirs = [r'G:\peter\ffmpeg-20140827-git-9e8ab36-win64-dev\lib']
+    include_dirs = []
+    library_dirs = []
 
 setup(
     name="FFVideo",
@@ -33,7 +33,7 @@ setup(
     ext_modules=[
         Extension("ffvideo", sources,
                   include_dirs=include_dirs,
-                  libraries=["avformat", "avcodec", "swscale"],
+                  libraries=["avformat", "avcodec", "swscale", "avutil"],
                   library_dirs=library_dirs)
     ],
     cmdclass=cmdclass,

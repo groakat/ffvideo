@@ -16,13 +16,22 @@ def read(fn):
 VERSION = "0.0.13"
 
 if platform.system() == 'Linux':
-    include_dirs = ["/usr/include/ffmpeg"]
-    library_dirs = []
+    try:
+        include_dirs = [os.environ['LIBRARY_INC']]
+        print("include", os.environ['LIBRARY_INC'])
+    except KeyError:
+        print("include KEYERROR")
+        include_dirs = ["/usr/include/ffmpeg"]
+    try:
+        library_dirs = [os.environ['LIBRARY_LIB']]
+        print("library", os.environ['LIBRARY_LIB'])
+    except KeyError:
+        print("lib KEYERROR")
+        library_dirs = []        
 elif platform.system() == 'Darwin':
     include_dirs = ['/usr/local/Cellar/ffmpeg/2.3/include/']
     library_dirs = ['/usr/local/Cellar/ffmpeg/2.3/lib/']
 else:
-    import os
     try:
         include_dirs = [os.environ['LIBRARY_INC']]
         print("include", os.environ['LIBRARY_INC'])

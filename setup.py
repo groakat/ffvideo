@@ -23,8 +23,14 @@ elif platform.system() == 'Darwin':
     library_dirs = ['/usr/local/Cellar/ffmpeg/2.3/lib/']
 else:
     import os
-    include_dirs = [os.environ['LIBRARY_INC']]
-    library_dirs = [os.environ['LIBRARY_LIB']]
+    try:
+        include_dirs = [os.environ['LIBRARY_INC']]
+    except KeyError:
+        include_dirs = []
+    try:
+        library_dirs = [os.environ['LIBRARY_LIB']]
+    except KeyError:
+        library_dirs = []
 
 setup(
     name="FFVideo",

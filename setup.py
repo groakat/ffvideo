@@ -15,6 +15,8 @@ def read(fn):
 
 VERSION = "0.0.13"
 
+print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", platform.system())
+
 if platform.system() == 'Linux':
     try:
         include_dirs = [os.environ['LIBRARY_INC']]

@@ -54,9 +54,9 @@ setup(
     long_description=read("README.txt"),
     ext_modules=[
         Extension("ffvideo", sources,
-                  include_dirs=include_dirs,
+                  include_dirs=os.environ['LIBRARY_INC'],#include_dirs,
                   libraries=["avformat", "avcodec", "swscale", "avutil"],
-                  library_dirs=library_dirs)
+                  library_dirs=os.environ['LIBRARY_LIB'])#library_dirs)
     ],
     cmdclass=cmdclass,
     author="Zakhar Zibarov",

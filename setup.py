@@ -25,11 +25,15 @@ else:
     import os
     try:
         include_dirs = [os.environ['LIBRARY_INC']]
+        print("include", os.environ['LIBRARY_INC'])
     except KeyError:
+        print("include KEYERROR")
         include_dirs = []
     try:
         library_dirs = [os.environ['LIBRARY_LIB']]
+        print("library", os.environ['LIBRARY_LIB'])
     except KeyError:
+        print("lib KEYERROR")
         library_dirs = []
 
 setup(

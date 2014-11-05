@@ -6,3 +6,5 @@ nose.*
 \.pyc$
 build
 dist
+
+.idea/

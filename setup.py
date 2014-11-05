@@ -13,7 +13,7 @@ except ImportError:
 def read(fn):
     return open(os.path.join(os.path.dirname(__file__), fn)).read()
 
-VERSION = "0.0.13"
+VERSION = "0.0.14"
 
 if platform.system() == 'Linux':
         include_dirs = ["/usr/include/ffmpeg"]
@@ -47,8 +47,8 @@ setup(
                   library_dirs=library_dirs)
     ],
     cmdclass=cmdclass,
-    author="Zakhar Zibarov",
-    author_email="zakhar.zibarov@gmail.com",
+    author="Zakhar Zibarov, Peter Rennert",
+    author_email="zakhar.zibarov@gmail.com, p.rennert@cs.ucl.ac.uk",
     url="http://bitbucket.org/zakhar/ffvideo/",
 )
 

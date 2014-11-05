@@ -69,9 +69,13 @@ cdef class VideoStream:
     cdef int frameno
     cdef AVFrame *frame
     cdef int64_t _frame_pts
+    
+    cdef uint8_t *video_dst_data[4]
+    cdef int      video_dst_linesize[4]
 
     cdef int ffmpeg_frame_mode
     cdef object __frame_mode
+    cdef int got_frame
 
     # public
     cdef readonly object filename
@@ -85,6 +89,7 @@ cdef class VideoStream:
 
     cdef readonly int frame_width
     cdef readonly int frame_height
+    cdef readonly int frame_offset
 
     cdef public int scale_mode
     cdef public int seek_mode
@@ -132,11 +137,13 @@ cdef class VideoStream:
         self.height = 0
         self.frameno = 0
         self.streamno = -1
+        #self.video_dst_data = {NULL}
 
     def __init__(self, filename, frame_size=None, frame_mode='RGB',
                  scale_mode=BICUBIC, seek_mode=SEEK_BACKWARD, exact_seek=False):
         cdef int ret
         cdef int i
+
 
         self.filename = filename
 
@@ -144,10 +151,21 @@ cdef class VideoStream:
         self.scale_mode = scale_mode
         self.seek_mode = seek_mode
         self.exact_seek = exact_seek
+        self.frame_size = (-1,-1)
+        
+        self.initVideoStream()
+        
+    def initVideoStream(self):
+        av_register_all()
+        
+        self.frame_offset = 0
+        
+        
+        
 
-        ret = avformat_open_input(&self.format_ctx, filename, NULL, NULL)
+        ret = avformat_open_input(&self.format_ctx, self.filename, NULL, NULL)
         if ret != 0:
-            raise DecoderError("Unable to open file %s" % filename)
+            raise DecoderError("Unable to open file %s" % self.filename)
 
         ret = avformat_find_stream_info(self.format_ctx, NULL)
         if ret < 0:
@@ -161,6 +179,25 @@ cdef class VideoStream:
             raise DecoderError("Unable to find video stream")
 
         self.stream = self.format_ctx.streams[self.streamno]
+        self.codec_ctx = self.stream.codec
+        
+        # ret = av_image_alloc(video_dst_data, video_dst_linesize,
+        #                     video_dec_ctx->width, video_dec_ctx->height,
+        #                     video_dec_ctx->pix_fmt, 1);
+        # ?
+        
+        self.frame = avcodec_alloc_frame()
+        
+        av_init_packet(&self.packet)
+        
+        self.packet.data = NULL;
+        self.packet.size = 0;
+        self.got_frame = 0;
+        
+        
+        
+        
+        
         self.framerate = av_q2d(self.stream.r_frame_rate)
 
         if self.stream.duration == 0 or self.stream.duration == AV_NOPTS_VALUE:
@@ -168,7 +205,6 @@ cdef class VideoStream:
         else:
             self.duration = self.stream.duration * av_q2d(self.stream.time_base)
 
-        self.codec_ctx = self.stream.codec
         self.codec = avcodec_find_decoder(self.codec_ctx.codec_id)
 
         if self.codec == NULL:
@@ -195,10 +231,8 @@ cdef class VideoStream:
         if self.width <= 0 or self.height <= 0:
             raise DecoderError("Video width/height is 0; cannot decode")
 
-        if frame_size is None:
-            self.frame_size = (self.width, self.height)
-        else:
-            self.frame_size = frame_size
+        #if self.frame_size is None:
+        self.frame_size = (self.width, self.height)
 
         self.codec_name = self.codec.name
         self.bitrate = self.format_ctx.bit_rate
@@ -222,30 +256,98 @@ cdef class VideoStream:
         av_dump_format(self.format_ctx, 0, self.filename, 0);
         av_log_set_level(AV_LOG_ERROR);
 
+    def __decode_packet(self, int cached):
+        cdef int ret = 0
+        cdef int decoded = self.packet.size
+        self.got_frame = 0
+        
+        if self.packet.stream_index == self.streamno:
+            while not self.got_frame:
+                #with nogil:
+                ret = avcodec_decode_video2(self.codec_ctx, self.frame,
+                                                &self.got_frame, &self.packet)
+                    
+                if ret == 0:
+                    print "break"
+                    print ret
+                    break
+                #else:
+                    #print ret
+                print ret
+                
+                if self.got_frame:
+                    print "copy image"
+                    av_image_copy(self.video_dst_data, 
+                                self.video_dst_linesize,
+                                <const uint8_t **> self.frame.data, 
+                                self.frame.linesize,
+                                self.codec_ctx.pix_fmt, 
+                                self.codec_ctx.width, 
+                                self.codec_ctx.height)
+                else:
+                    print "increment frame_offset"
+                    self.frame_offset += 1
+                    self.packet.data += self.packet.size
+                    self.packet.size -= self.packet.size
+               
+                # av_image_copy ?
+                
+        return decoded
+    
     def __decode_next_frame(self):
         cdef int ret
         cdef int frame_finished = 0
         cdef int64_t pts
-
-        while not frame_finished:
+        
+        if self.packet.size <= 0:
             ret = av_read_frame(self.format_ctx, &self.packet)
-            if ret < 0:
+            if ret < 0 and not self.got_frame:                
                 raise NoMoreData("Unable to read frame. [%d]" % ret)
+            elif ret < 0 and self.got_frame:                
+                # flush cached frames
+                print "flushing buffers"
+                self.packet.data = NULL
+                self.packet.size = 0
+                self.__decode_packet(1)
+                
+            else:            
+                print "normal decoding of buffers"
+                ret = self.__decode_packet(0)
+                self.packet.data += ret
+                self.packet.size -= ret
+        else:            
+            print "collecting buffers"
+            ret = self.__decode_packet(0)
+            self.packet.data += ret
+            self.packet.size -= ret
+            
+        
+        #while av_read_frame(self.format_ctx, &self.packet):
+            #while True:
+                #ret = __decode_packet(&self.got_frame, 0)
+                #if ret < 0:
+                    #break
+                #pkt.data += ret
+                #pkt.size -= ret
+                
+                #if pkt.size <= 0:
+                    #break
+               
+        ## flush cached frames
+        #self.packet.data = NULL
+        #self.packet.size = 0
+        #while True:
+            #__decode_packet(&self.got_frame, 1)
+            
+            #if not self.got_frame:
+                #break
+            
+            
+        if self.packet.pts == AV_NOPTS_VALUE:
+            pts = self.packet.dts
+        else:
+            pts = self.packet.pts
 
-            if self.packet.stream_index == self.streamno:
-                with nogil:
-                    ret = avcodec_decode_video2(self.codec_ctx, self.frame,
-                                               &frame_finished, &self.packet)
-                if ret < 0:
-                    av_free_packet(&self.packet)
-                    raise IOError("Unable to decode video picture: %d" % ret)
-
-                if self.packet.pts == AV_NOPTS_VALUE:
-                    pts = self.packet.dts
-                else:
-                    pts = self.packet.pts
-
-            av_free_packet(&self.packet)
 
 #        print "frame>> pict_type=%s" % "*IPBSip"[self.frame.pict_type],
 #        print "pts=%s, dts=%s, frameno=%s" % (pts, self.packet.dts, self.frameno),
@@ -259,6 +361,41 @@ cdef class VideoStream:
                      self.stream.time_base)
         )
         return self.frame.pts
+    
+    
+    #def __decode_next_frame_org(self):
+        #while not frame_finished:
+            #ret = av_read_frame(self.format_ctx, &self.packet)
+            #if ret < 0:
+                #raise NoMoreData("Unable to read frame. [%d]" % ret)
+
+            #if self.packet.stream_index == self.streamno:
+                #with nogil:
+                    #ret = avcodec_decode_video2(self.codec_ctx, self.frame,
+                                               #&frame_finished, &self.packet)
+                #if ret < 0:
+                    #av_free_packet(&self.packet)
+                    #raise IOError("Unable to decode video picture: %d" % ret)
+
+                #if self.packet.pts == AV_NOPTS_VALUE:
+                    #pts = self.packet.dts
+                #else:
+                    #pts = self.packet.pts
+
+            #av_free_packet(&self.packet)
+
+##        print "frame>> pict_type=%s" % "*IPBSip"[self.frame.pict_type],
+##        print "pts=%s, dts=%s, frameno=%s" % (pts, self.packet.dts, self.frameno),
+##        print "ts=%.3f" % av_q2d(av_mul_q(AVRational(pts-self.stream.start_time, 1), self.stream.time_base))
+
+        #self.frame.pts = av_rescale_q(pts-self.stream.start_time,
+                                      #self.stream.time_base, AV_TIME_BASE_Q)
+        #self.frame.display_picture_number = <int>av_q2d(
+            #av_mul_q(av_mul_q(AVRational(pts - self.stream.start_time, 1),
+                              #self.stream.r_frame_rate),
+                     #self.stream.time_base)
+        #)
+        #return self.frame.pts
 
     def dump_next_frame(self):
         pts = self.__decode_next_frame()
@@ -291,13 +428,14 @@ cdef class VideoStream:
                 self.width, self.height, self.codec_ctx.pix_fmt,
                 self.frame_width, self.frame_height, self.ffmpeg_frame_mode,
                 self.scale_mode, NULL, NULL, NULL)
-
+            
             sws_scale(img_convert_ctx,
                 self.frame.data, self.frame.linesize, 0, self.height,
                 scaled_frame.data, scaled_frame.linesize)
 
             sws_freeContext(img_convert_ctx)
             av_free(scaled_frame)
+            
 
         return VideoFrame(data, self.frame_size, self.frame_mode,
                           timestamp=<double>self.frame.pts/<double>AV_TIME_BASE,
@@ -327,6 +465,8 @@ cdef class VideoStream:
         # if we hurry it we can get bad frames later in the GOP
         self.codec_ctx.skip_idct = AVDISCARD_BIDIR
         self.codec_ctx.skip_frame = AVDISCARD_BIDIR
+        #self.codec_ctx.skip_idct = AVDISCARD_DEFAULT
+        #self.codec_ctx.skip_frame = AVDISCARD_DEFAULT
 
         #self.codec_ctx.hurry_up = 1
         hurried_frames = 0
@@ -339,10 +479,10 @@ cdef class VideoStream:
         self.codec_ctx.skip_frame = AVDISCARD_DEFAULT
 
 
-        print("--------------------", self.stream.index, self.stream.cur_dts, self.stream.id, stream_pts)
+        print("--------------------", self.stream.index, self.stream.cur_dts, self.stream.id, stream_pts, pts)
 
         if self.exact_seek:
-            while self.stream.cur_dts < stream_pts + 9:
+            while self.stream.cur_dts < stream_pts:# + self.frame_offset:
                 print("-------------------- looping to", stream_pts, self.stream.cur_dts)
                 self.__next__()
 

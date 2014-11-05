@@ -269,6 +269,7 @@ cdef class VideoStream:
                     
                 if ret == 0:
                     print "break"
+                    print "got_frame", self.got_frame
                     print ret
                     break
                 #else:
@@ -321,6 +322,8 @@ cdef class VideoStream:
             self.packet.data += ret
             self.packet.size -= ret
             
+        if self.got_frame == 0:
+            raise NoMoreData("Unable to read frame.")
         
         #while av_read_frame(self.format_ctx, &self.packet):
             #while True:
@@ -405,7 +408,7 @@ cdef class VideoStream:
         print "f.coded_picture_number=%s, f.display_picture_number=%s" % \
               (self.frame.coded_picture_number, self.frame.display_picture_number)
 
-    def current(self):
+    def current(self):        
         cdef AVFrame *scaled_frame
         cdef Py_ssize_t buflen
         cdef char *data_ptr
@@ -498,7 +501,14 @@ cdef class VideoStream:
         return self
 
     def __next__(self):
-        self.__decode_next_frame()
+        try:
+            ret = self.__decode_next_frame()
+        except (NoMoreData), e:
+            raise StopIteration
+        
+        #if ret == 0:
+            #raise StopIteration
+        
         return self.current()
 
     def __getitem__(self, frameno):

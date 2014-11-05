@@ -12,7 +12,7 @@ except ImportError:
 def read(fn):
     return open(os.path.join(os.path.dirname(__file__), fn)).read()
 
-VERSION = "0.0.13"
+VERSION = "0.0.14"
 
 setup(
     name="FFVideo",
@@ -25,8 +25,8 @@ setup(
                   libraries=["avformat", "avcodec", "swscale"])
     ],
     cmdclass=cmdclass,
-    author="Zakhar Zibarov",
-    author_email="zakhar.zibarov@gmail.com",
+    author="Zakhar Zibarov, Peter Rennert",
+    author_email="zakhar.zibarov@gmail.com, p.rennert@cs.ucl.ac.uk",
     url="http://bitbucket.org/zakhar/ffvideo/",
 )
 

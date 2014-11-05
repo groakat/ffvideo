@@ -263,21 +263,15 @@ cdef class VideoStream:
         
         if self.packet.stream_index == self.streamno:
             while not self.got_frame:
-                #with nogil:
                 ret = avcodec_decode_video2(self.codec_ctx, self.frame,
                                                 &self.got_frame, &self.packet)
-                    
-                if ret == 0:
-                    print "break"
-                    print "got_frame", self.got_frame
-                    print ret
-                    break
-                #else:
-                    #print ret
-                print ret
-                
+                                    
                 if self.got_frame:
-                    print "copy image"
+                    # av_image_copy is not necessary, but I left it in,
+                    # because it is in
+                    # https://www.ffmpeg.org/doxygen/2.1/doc_2examples_2demuxing_8c-example.html
+                    
+                    
                     av_image_copy(self.video_dst_data, 
                                 self.video_dst_linesize,
                                 <const uint8_t **> self.frame.data, 
@@ -285,14 +279,21 @@ cdef class VideoStream:
                                 self.codec_ctx.pix_fmt, 
                                 self.codec_ctx.width, 
                                 self.codec_ctx.height)
+                    
+                    self.packet.data += self.packet.size
+                    self.packet.size -= self.packet.size
+                    break
+                
+                if ret <= 0:
+                    # 
+                    break                
                 else:
-                    print "increment frame_offset"
+                    # getting over packages that are headers or something
+                    # like that.
                     self.frame_offset += 1
                     self.packet.data += self.packet.size
                     self.packet.size -= self.packet.size
-               
-                # av_image_copy ?
-                
+                               
         return decoded
     
     def __decode_next_frame(self):
@@ -306,45 +307,17 @@ cdef class VideoStream:
                 raise NoMoreData("Unable to read frame. [%d]" % ret)
             elif ret < 0 and self.got_frame:                
                 # flush cached frames
-                print "flushing buffers"
                 self.packet.data = NULL
                 self.packet.size = 0
                 self.__decode_packet(1)
                 
             else:            
-                print "normal decoding of buffers"
                 ret = self.__decode_packet(0)
-                self.packet.data += ret
-                self.packet.size -= ret
         else:            
-            print "collecting buffers"
             ret = self.__decode_packet(0)
-            self.packet.data += ret
-            self.packet.size -= ret
             
         if self.got_frame == 0:
-            raise NoMoreData("Unable to read frame.")
-        
-        #while av_read_frame(self.format_ctx, &self.packet):
-            #while True:
-                #ret = __decode_packet(&self.got_frame, 0)
-                #if ret < 0:
-                    #break
-                #pkt.data += ret
-                #pkt.size -= ret
-                
-                #if pkt.size <= 0:
-                    #break
-               
-        ## flush cached frames
-        #self.packet.data = NULL
-        #self.packet.size = 0
-        #while True:
-            #__decode_packet(&self.got_frame, 1)
-            
-            #if not self.got_frame:
-                #break
-            
+            raise NoMoreData("Unable to read frame. Reached probably end of stream")
             
         if self.packet.pts == AV_NOPTS_VALUE:
             pts = self.packet.dts
@@ -365,40 +338,6 @@ cdef class VideoStream:
         )
         return self.frame.pts
     
-    
-    #def __decode_next_frame_org(self):
-        #while not frame_finished:
-            #ret = av_read_frame(self.format_ctx, &self.packet)
-            #if ret < 0:
-                #raise NoMoreData("Unable to read frame. [%d]" % ret)
-
-            #if self.packet.stream_index == self.streamno:
-                #with nogil:
-                    #ret = avcodec_decode_video2(self.codec_ctx, self.frame,
-                                               #&frame_finished, &self.packet)
-                #if ret < 0:
-                    #av_free_packet(&self.packet)
-                    #raise IOError("Unable to decode video picture: %d" % ret)
-
-                #if self.packet.pts == AV_NOPTS_VALUE:
-                    #pts = self.packet.dts
-                #else:
-                    #pts = self.packet.pts
-
-            #av_free_packet(&self.packet)
-
-##        print "frame>> pict_type=%s" % "*IPBSip"[self.frame.pict_type],
-##        print "pts=%s, dts=%s, frameno=%s" % (pts, self.packet.dts, self.frameno),
-##        print "ts=%.3f" % av_q2d(av_mul_q(AVRational(pts-self.stream.start_time, 1), self.stream.time_base))
-
-        #self.frame.pts = av_rescale_q(pts-self.stream.start_time,
-                                      #self.stream.time_base, AV_TIME_BASE_Q)
-        #self.frame.display_picture_number = <int>av_q2d(
-            #av_mul_q(av_mul_q(AVRational(pts - self.stream.start_time, 1),
-                              #self.stream.r_frame_rate),
-                     #self.stream.time_base)
-        #)
-        #return self.frame.pts
 
     def dump_next_frame(self):
         pts = self.__decode_next_frame()
@@ -468,8 +407,6 @@ cdef class VideoStream:
         # if we hurry it we can get bad frames later in the GOP
         self.codec_ctx.skip_idct = AVDISCARD_BIDIR
         self.codec_ctx.skip_frame = AVDISCARD_BIDIR
-        #self.codec_ctx.skip_idct = AVDISCARD_DEFAULT
-        #self.codec_ctx.skip_frame = AVDISCARD_DEFAULT
 
         #self.codec_ctx.hurry_up = 1
         hurried_frames = 0
@@ -480,14 +417,6 @@ cdef class VideoStream:
 
         self.codec_ctx.skip_idct = AVDISCARD_DEFAULT
         self.codec_ctx.skip_frame = AVDISCARD_DEFAULT
-
-
-        print("--------------------", self.stream.index, self.stream.cur_dts, self.stream.id, stream_pts, pts)
-
-        if self.exact_seek:
-            while self.stream.cur_dts < stream_pts:# + self.frame_offset:
-                print("-------------------- looping to", stream_pts, self.stream.cur_dts)
-                self.__next__()
 
         return self.current()
 
@@ -505,10 +434,7 @@ cdef class VideoStream:
             ret = self.__decode_next_frame()
         except (NoMoreData), e:
             raise StopIteration
-        
-        #if ret == 0:
-            #raise StopIteration
-        
+                
         return self.current()
 
     def __getitem__(self, frameno):

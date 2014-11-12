@@ -263,7 +263,8 @@ cdef class VideoStream:
         
         if self.packet.stream_index == self.streamno:
             while not self.got_frame:
-                ret = avcodec_decode_video2(self.codec_ctx, self.frame,
+                with nogil:
+                    ret = avcodec_decode_video2(self.codec_ctx, self.frame,
                                                 &self.got_frame, &self.packet)
                                     
                 if self.got_frame:

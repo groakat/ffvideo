@@ -21,6 +21,8 @@ if platform.system() == 'Linux':
 elif platform.system() == 'Darwin':
     #include_dirs = ['/usr/local/Cellar/ffmpeg/2.3/include/']
     #library_dirs = ['/usr/local/Cellar/ffmpeg/2.3/lib/']
+    include_dirs = []
+    library_dirs = []
     try:
         # for build with conda
         include_dirs += [os.path.join(os.environ['PREFIX'],

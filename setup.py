@@ -45,6 +45,9 @@ else:
         print("lib KEYERROR")
         library_dirs = []
 
+LIBPATH = os.path.join(os.environ['PREFIX'],
+                         'lib') + '/'
+
 setup(
     name="FFVideo",
     version=VERSION,
@@ -53,9 +56,9 @@ setup(
     ext_modules=[
         Extension("ffvideo", sources,
                   include_dirs=include_dirs,
-                  libraries=["avformat.a", "avcodec.a", "swscale.a", "avutil.a"],
+                  libraries=["avformat", "avcodec", "swscale", "avutil"],
                   library_dirs=library_dirs,
-                  extra_objects=["avformat.a", "avcodec.a", "swscale.a", "avutil.a"])
+                  extra_objects=[LIBPATH + "avformat.a",LIBPATH +  "avcodec.a",LIBPATH +  "swscale.a",LIBPATH +  "avutil.a"])
     ],
     cmdclass=cmdclass,
     author="Zakhar Zibarov, Peter Rennert",

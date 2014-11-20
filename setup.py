@@ -57,7 +57,8 @@ setup(
                   include_dirs=include_dirs,
                   libraries=["avformat", "avcodec", "swscale", "avutil"],
                   library_dirs=library_dirs,
-                  extra_objects=[LIBPATH + "avformat.a",LIBPATH +  "avcodec.a",LIBPATH +  "swscale.a",LIBPATH +  "avutil.a"])
+                  extra_objects=[LIBPATH + "libavformat.a",LIBPATH +  "libavcodec.a",LIBPATH +  "libswscale.a",
+                                  LIBPATH +  "libavutil.a"])
     ],
     cmdclass=cmdclass,
     author="Zakhar Zibarov, Peter Rennert",

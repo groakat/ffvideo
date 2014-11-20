@@ -45,8 +45,7 @@ else:
         print("lib KEYERROR")
         library_dirs = []
 
-LIBPATH = os.path.join(os.environ['PREFIX'],
-                         'lib') + '/'
+LIBPATH = '/Users/peter/anaconda/lib/'
 
 setup(
     name="FFVideo",

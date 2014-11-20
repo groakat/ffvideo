@@ -55,8 +55,9 @@ setup(
     ext_modules=[
         Extension("ffvideo", sources,
                   include_dirs=include_dirs,
-                  libraries=["avformat", "avcodec", "swscale", "avutil"],
+                  #libraries=["avformat", "avcodec", "swscale", "avutil"],
                   library_dirs=library_dirs,
+                  language='c++',
                   extra_objects=[LIBPATH + "libavformat.a",LIBPATH +  "libavcodec.a",LIBPATH +  "libswscale.a",
                                   LIBPATH +  "libavutil.a"])
     ],

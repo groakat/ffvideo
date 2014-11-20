@@ -53,8 +53,9 @@ setup(
     ext_modules=[
         Extension("ffvideo", sources,
                   include_dirs=include_dirs,
-                  libraries=["avformat", "avcodec", "swscale", "avutil"],
-                  library_dirs=library_dirs)
+                  libraries=["avformat.a", "avcodec.a", "swscale.a", "avutil.a"],
+                  library_dirs=library_dirs,
+                  extra_objects=["avformat.a", "avcodec.a", "swscale.a", "avutil.a"])
     ],
     cmdclass=cmdclass,
     author="Zakhar Zibarov, Peter Rennert",

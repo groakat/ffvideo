@@ -65,7 +65,8 @@ setup(
                   #extra_objects=[LIBPATH + "libavformat.a",LIBPATH +  "libavcodec.a",LIBPATH +  "libswscale.a",
                   #                LIBPATH + "libavutil.a", LIBPATH + "libavdevice.a", 
                   #                LIBPATH + "libavformat.a", LIBPATH + "libpostproc.a",
-                  #                LIBPATH + "libswresample.a", LIBPATH + "libswscale.a"])
+                  #                LIBPATH + "libswresample.a", LIBPATH + "libswscale.a"]
+                  )
     ],
     cmdclass=cmdclass,
     author="Zakhar Zibarov, Peter Rennert",

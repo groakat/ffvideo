@@ -62,10 +62,10 @@ setup(
                                   LIBPATH + "libswresample", LIBPATH + "libswscale"],
                   library_dirs=library_dirs,
                   #language='c++',
-                  extra_objects=[LIBPATH + "libavformat.a",LIBPATH +  "libavcodec.a",LIBPATH +  "libswscale.a",
-                                  LIBPATH + "libavutil.a", LIBPATH + "libavdevice.a", 
-                                  LIBPATH + "libavformat.a", LIBPATH + "libpostproc.a",
-                                  LIBPATH + "libswresample.a", LIBPATH + "libswscale.a"])
+                  #extra_objects=[LIBPATH + "libavformat.a",LIBPATH +  "libavcodec.a",LIBPATH +  "libswscale.a",
+                  #                LIBPATH + "libavutil.a", LIBPATH + "libavdevice.a", 
+                  #                LIBPATH + "libavformat.a", LIBPATH + "libpostproc.a",
+                  #                LIBPATH + "libswresample.a", LIBPATH + "libswscale.a"])
     ],
     cmdclass=cmdclass,
     author="Zakhar Zibarov, Peter Rennert",

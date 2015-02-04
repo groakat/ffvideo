@@ -19,8 +19,10 @@ if platform.system() == 'Linux':
         include_dirs = ["/usr/include/ffmpeg"]
         library_dirs = []        
 elif platform.system() == 'Darwin':
-    include_dirs = ['/usr/local/Cellar/ffmpeg/2.3/include/']
-    library_dirs = ['/usr/local/Cellar/ffmpeg/2.3/lib/']
+    #include_dirs = ['/usr/local/Cellar/ffmpeg/2.3/include/']
+    #library_dirs = ['/usr/local/Cellar/ffmpeg/2.3/lib/']
+    include_dirs = []
+    library_dirs = []
     try:
         # for build with conda
         include_dirs += [os.path.join(os.environ['PREFIX'],
@@ -43,6 +45,8 @@ else:
         print("lib KEYERROR")
         library_dirs = []
 
+LIBPATH = '/Users/peter/anaconda/lib/'
+
 setup(
     name="FFVideo",
     version=VERSION,
@@ -52,7 +56,17 @@ setup(
         Extension("ffvideo", sources,
                   include_dirs=include_dirs,
                   libraries=["avformat", "avcodec", "swscale", "avutil"],
-                  library_dirs=library_dirs)
+                  #libraries=[LIBPATH + "libavformat",LIBPATH +  "libavcodec",LIBPATH +  "libswscale",
+                  #                LIBPATH + "libavutil", LIBPATH + "libavdevice", 
+                  #                LIBPATH + "libavformat", LIBPATH + "libpostproc",
+                  #                LIBPATH + "libswresample", LIBPATH + "libswscale"],
+                  library_dirs=library_dirs,
+                  #language='c++',
+                  #extra_objects=[LIBPATH + "libavformat.a",LIBPATH +  "libavcodec.a",LIBPATH +  "libswscale.a",
+                  #                LIBPATH + "libavutil.a", LIBPATH + "libavdevice.a", 
+                  #                LIBPATH + "libavformat.a", LIBPATH + "libpostproc.a",
+                  #                LIBPATH + "libswresample.a", LIBPATH + "libswscale.a"]
+                  )
     ],
     cmdclass=cmdclass,
     author="Zakhar Zibarov, Peter Rennert",

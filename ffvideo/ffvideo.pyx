@@ -128,7 +128,7 @@ cdef class VideoStream:
             return (self.frame_width, self.frame_height)
 
     def __cinit__(self, filename, frame_size=None, frame_mode='RGB',
-                  scale_mode=BICUBIC, seek_mode=SEEK_BACKWARD, exact_seek=False):
+                  scale_mode=BICUBIC, seek_mode=SEEK_BACKWARD, exact_seek=True):
         self.format_ctx = NULL
         self.codec_ctx = NULL
         self.frame = avcodec_alloc_frame()
@@ -140,7 +140,7 @@ cdef class VideoStream:
         #self.video_dst_data = {NULL}
 
     def __init__(self, filename, frame_size=None, frame_mode='RGB',
-                 scale_mode=BICUBIC, seek_mode=SEEK_BACKWARD, exact_seek=False):
+                 scale_mode=BICUBIC, seek_mode=SEEK_BACKWARD, exact_seek=True):
         cdef int ret
         cdef int i
 
@@ -256,44 +256,50 @@ cdef class VideoStream:
         av_dump_format(self.format_ctx, 0, self.filename, 0);
         av_log_set_level(AV_LOG_ERROR);
 
-    def __decode_packet(self, int cached):
+    def __decode_packet(self, int cached):        
+        #print "__decode_packet"
         cdef int ret = 0
         cdef int decoded = self.packet.size
         self.got_frame = 0
         
         if self.packet.stream_index == self.streamno:
-            while not self.got_frame:
-                with nogil:
-                    ret = avcodec_decode_video2(self.codec_ctx, self.frame,
-                                                &self.got_frame, &self.packet)
-                                    
-                if self.got_frame:
-                    # av_image_copy is not necessary, but I left it in,
-                    # because it is in
-                    # https://www.ffmpeg.org/doxygen/2.1/doc_2examples_2demuxing_8c-example.html
-                    
-                    
-                    av_image_copy(self.video_dst_data, 
-                                self.video_dst_linesize,
-                                <const uint8_t **> self.frame.data, 
-                                self.frame.linesize,
-                                self.codec_ctx.pix_fmt, 
-                                self.codec_ctx.width, 
-                                self.codec_ctx.height)
-                    
-                    self.packet.data += self.packet.size
-                    self.packet.size -= self.packet.size
-                    break
+            #print "Enter loop"
+            with nogil:
+                ret = avcodec_decode_video2(self.codec_ctx, self.frame,
+                                            &self.got_frame, &self.packet)
+                                
+            if self.got_frame:
+                # av_image_copy is not necessary, but I left it in,
+                # because it is in
+                # https://www.ffmpeg.org/doxygen/2.1/doc_2examples_2demuxing_8c-example.html
                 
-                if ret <= 0:
-                    # 
-                    break                
-                else:
-                    # getting over packages that are headers or something
-                    # like that.
-                    self.frame_offset += 1
-                    self.packet.data += self.packet.size
-                    self.packet.size -= self.packet.size
+                
+                av_image_copy(self.video_dst_data, 
+                            self.video_dst_linesize,
+                            <const uint8_t **> self.frame.data, 
+                            self.frame.linesize,
+                            self.codec_ctx.pix_fmt, 
+                            self.codec_ctx.width, 
+                            self.codec_ctx.height)
+                
+                self.packet.data += self.packet.size
+                self.packet.size -= self.packet.size
+                
+                #print "self.got_frame"
+                #break
+            
+            if ret <= 0:
+                # 
+                #print "ret <= 0"
+                #break              
+                pass
+            else:
+                # getting over packages that are headers or something
+                # like that.
+                #print "else"
+                self.frame_offset += 1
+                self.packet.data += self.packet.size
+                self.packet.size -= self.packet.size
                                
         return decoded
     
@@ -302,20 +308,25 @@ cdef class VideoStream:
         cdef int frame_finished = 0
         cdef int64_t pts
         
-        if self.packet.size <= 0:
-            ret = av_read_frame(self.format_ctx, &self.packet)
-            if ret < 0 and not self.got_frame:                
-                raise NoMoreData("Unable to read frame. [%d]" % ret)
-            elif ret < 0 and self.got_frame:                
-                # flush cached frames
-                self.packet.data = NULL
-                self.packet.size = 0
-                self.__decode_packet(1)
-                
+        self.got_frame = 0
+        while not self.got_frame:
+            if self.packet.size <= 0:
+                ret = av_read_frame(self.format_ctx, &self.packet)
+                if ret < 0 and not self.got_frame:                
+                    raise NoMoreData("Unable to read frame. [%d]" % ret)
+                elif ret < 0 and self.got_frame:                
+                    # flush cached frames
+                    self.packet.data = NULL
+                    self.packet.size = 0
+                    self.__decode_packet(1)
+                    
+                else:            
+                    ret = self.__decode_packet(0)
             else:            
                 ret = self.__decode_packet(0)
-        else:            
-            ret = self.__decode_packet(0)
+            
+            if not self.got_frame:
+                av_free_packet(&self.packet)
             
         if self.got_frame == 0:
             raise NoMoreData("Unable to read frame. Reached probably end of stream")

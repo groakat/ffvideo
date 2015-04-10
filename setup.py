@@ -18,17 +18,19 @@ VERSION = "0.0.14"
 if platform.system() == 'Linux':
         #include_dirs = ["/home/peter/ffmpeg_build_shared/lib/", "/usr/include/ffmpeg"]
         #library_dirs = ["/home/peter/ffmpeg_build_shared/include/"]                
-    p = os.environ['PATH']
-    include_dirs = [os.path.join(x, '..', 'include') for x in p.split(':')]
-    library_dirs = [os.path.join(x, '..', 'lib') for x in p.split(':')]
+    #p = os.environ['PATH']
+    #include_dirs = [os.path.join(x, '..', 'include') for x in p.split(':')]
+    #library_dirs = [os.path.join(x, '..', 'lib') for x in p.split(':')]
     try:
         # for build with conda
-        include_dirs += [os.path.join(os.environ['PREFIX'],
+        include_dirs = [os.path.join(os.environ['PREFIX'],
                          'include')]
-        library_dirs += [os.path.join(os.environ['PREFIX'],
+        library_dirs = [os.path.join(os.environ['PREFIX'],
                          'lib')]
-    except KeyError:
-        pass
+    except KeyError:     
+        p = os.environ['PATH']
+        include_dirs = [os.path.join(x, '..', 'include') for x in p.split(':')]
+        library_dirs = [os.path.join(x, '..', 'lib') for x in p.split(':')]
         
 elif platform.system() == 'Darwin':
     p = os.environ['PATH']

@@ -16,8 +16,8 @@ def read(fn):
 VERSION = "0.0.14"
 
 if platform.system() == 'Linux':
-        include_dirs = ["/usr/include/ffmpeg"]
-        library_dirs = []        
+        include_dirs = ["/usr/include/ffmpeg", "/home/peter/ffmpeg_build_shared/lib/" ]
+        library_dirs = ["/home/peter/ffmpeg_build_shared/include/"]        
 elif platform.system() == 'Darwin':
     p = os.environ['PATH']
     include_dirs = [os.path.join(x, '..', 'include') for x in p.split(':')]

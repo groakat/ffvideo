@@ -16,7 +16,7 @@ def read(fn):
 VERSION = "0.0.14"
 
 if platform.system() == 'Linux':
-        include_dirs = ["/usr/include/ffmpeg", "/home/peter/ffmpeg_build_shared/lib/" ]
+        include_dirs = ["/home/peter/ffmpeg_build_shared/lib/", "/usr/include/ffmpeg"]
         library_dirs = ["/home/peter/ffmpeg_build_shared/include/"]        
 elif platform.system() == 'Darwin':
     p = os.environ['PATH']

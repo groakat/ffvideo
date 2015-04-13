@@ -34,6 +34,9 @@ if platform.system() == 'Linux':
     p = os.environ['PATH']
     include_dirs += [os.path.join(x, '..', 'include') for x in p.split(':')]
     library_dirs += [os.path.join(x, '..', 'lib') for x in p.split(':')]
+    
+    include_dirs += ['/home/ucabpre/usr/include']
+    library_dirs += ['/home/ucabpre/usr/lib']
         
 elif platform.system() == 'Darwin':
     p = os.environ['PATH']

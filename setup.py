@@ -27,10 +27,13 @@ if platform.system() == 'Linux':
                          'include')]
         library_dirs = [os.path.join(os.environ['PREFIX'],
                          'lib')]
-    except KeyError:     
-        p = os.environ['PATH']
-        include_dirs = [os.path.join(x, '..', 'include') for x in p.split(':')]
-        library_dirs = [os.path.join(x, '..', 'lib') for x in p.split(':')]
+    except KeyError: 
+        include_dirs = []
+        library_dirs = []
+        
+    p = os.environ['PATH']
+    include_dirs += [os.path.join(x, '..', 'include') for x in p.split(':')]
+    library_dirs += [os.path.join(x, '..', 'lib') for x in p.split(':')]
         
 elif platform.system() == 'Darwin':
     p = os.environ['PATH']

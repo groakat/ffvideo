@@ -22,29 +22,29 @@ cdef extern from "libavutil/mathematics.h":
 cdef extern from "libavutil/avutil.h":
     cdef enum PixelFormat:
         PIX_FMT_NONE= -1,
-        PIX_FMT_YUV420P,   #< Planar YUV 4:2:0 (1 Cr & Cb sample per 2x2 Y samples)
-        PIX_FMT_YUV422,    #< Packed pixel, Y0 Cb Y1 Cr
-        PIX_FMT_RGB24,     #< Packed pixel, 3 bytes per pixel, RGBRGB...
-        PIX_FMT_BGR24,     #< Packed pixel, 3 bytes per pixel, BGRBGR...
-        PIX_FMT_YUV422P,   #< Planar YUV 4:2:2 (1 Cr & Cb sample per 2x1 Y samples)
-        PIX_FMT_YUV444P,   #< Planar YUV 4:4:4 (1 Cr & Cb sample per 1x1 Y samples)
-        PIX_FMT_RGBA32,    #< Packed pixel, 4 bytes per pixel, BGRABGRA..., stored in cpu endianness
-        PIX_FMT_YUV410P,   #< Planar YUV 4:1:0 (1 Cr & Cb sample per 4x4 Y samples)
-        PIX_FMT_YUV411P,   #< Planar YUV 4:1:1 (1 Cr & Cb sample per 4x1 Y samples)
-        PIX_FMT_RGB565,    #< always stored in cpu endianness
-        PIX_FMT_RGB555,    #< always stored in cpu endianness, most significant bit to 1
-        PIX_FMT_GRAY8,
-        PIX_FMT_MONOWHITE, #< 0 is white
-        PIX_FMT_MONOBLACK, #< 0 is black
-        PIX_FMT_PAL8,      #< 8 bit with RGBA palette
-        PIX_FMT_YUVJ420P,  #< Planar YUV 4:2:0 full scale (jpeg)
-        PIX_FMT_YUVJ422P,  #< Planar YUV 4:2:2 full scale (jpeg)
-        PIX_FMT_YUVJ444P,  #< Planar YUV 4:4:4 full scale (jpeg)
-        PIX_FMT_XVMC_MPEG2_MC,#< XVideo Motion Acceleration via common packet passing(xvmc_render.h)
-        PIX_FMT_XVMC_MPEG2_IDCT,
-        PIX_FMT_UYVY422,   #< Packed pixel, Cb Y0 Cr Y1
-        PIX_FMT_UYVY411,   #< Packed pixel, Cb Y0 Y1 Cr Y2 Y3
-        PIX_FMT_NB,
+        AV_PIX_FMT_YUV420P,   #< Planar YUV 4:2:0 (1 Cr & Cb sample per 2x2 Y samples)
+        AV_PIX_FMT_YUV422,    #< Packed pixel, Y0 Cb Y1 Cr
+        AV_PIX_FMT_RGB24,     #< Packed pixel, 3 bytes per pixel, RGBRGB...
+        AV_PIX_FMT_BGR24,     #< Packed pixel, 3 bytes per pixel, BGRBGR...
+        AV_PIX_FMT_YUV422P,   #< Planar YUV 4:2:2 (1 Cr & Cb sample per 2x1 Y samples)
+        AV_PIX_FMT_YUV444P,   #< Planar YUV 4:4:4 (1 Cr & Cb sample per 1x1 Y samples)
+        AV_PIX_FMT_RGBA32,    #< Packed pixel, 4 bytes per pixel, BGRABGRA..., stored in cpu endianness
+        AV_PIX_FMT_YUV410P,   #< Planar YUV 4:1:0 (1 Cr & Cb sample per 4x4 Y samples)
+        AV_PIX_FMT_YUV411P,   #< Planar YUV 4:1:1 (1 Cr & Cb sample per 4x1 Y samples)
+        AV_PIX_FMT_RGB565,    #< always stored in cpu endianness
+        AV_PIX_FMT_RGB555,    #< always stored in cpu endianness, most significant bit to 1
+        AV_PIX_FMT_GRAY8,
+        AV_PIX_FMT_MONOWHITE, #< 0 is white
+        AV_PIX_FMT_MONOBLACK, #< 0 is black
+        AV_PIX_FMT_PAL8,      #< 8 bit with RGBA palette
+        AV_PIX_FMT_YUVJ420P,  #< Planar YUV 4:2:0 full scale (jpeg)
+        AV_PIX_FMT_YUVJ422P,  #< Planar YUV 4:2:2 full scale (jpeg)
+        AV_PIX_FMT_YUVJ444P,  #< Planar YUV 4:4:4 full scale (jpeg)
+        AV_PIX_FMT_XVMC_MPEG2_MC,#< XVideo Motion Acceleration via common packet passing(xvmc_render.h)
+        AV_PIX_FMT_XVMC_MPEG2_IDCT,
+        AV_PIX_FMT_UYVY422,   #< Packed pixel, Cb Y0 Cr Y1
+        AV_PIX_FMT_UYVY411,   #< Packed pixel, Cb Y0 Y1 Cr Y2 Y3
+        AV_PIX_FMT_NB,
 
     struct AVDictionaryEntry:
         char *key
@@ -372,7 +372,7 @@ cdef extern from "libavcodec/avcodec.h":
     int avcodec_decode_video2(AVCodecContext *avctx, AVFrame *picture,
                          int *got_picture_ptr, AVPacket *avpkt) nogil
     int avpicture_fill(AVPicture *picture, void *ptr, int pix_fmt, int width, int height) nogil
-    AVFrame *avcodec_alloc_frame()
+    AVFrame *av_frame_alloc()
     int avpicture_get_size(int pix_fmt, int width, int height)
     int avpicture_layout(AVPicture* src, int pix_fmt, int width, int height,
                      unsigned char *dest, int dest_size)

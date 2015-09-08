@@ -50,9 +50,9 @@ SEEK_FRAME = AVSEEK_FLAG_FRAME          #< seeking based on frame number
 
 
 FRAME_MODES = {
-    'RGB': PIX_FMT_RGB24,
-    'L': PIX_FMT_GRAY8,
-    'YUV420P': PIX_FMT_YUV420P
+    'RGB': AV_PIX_FMT_RGB24,
+    'L': AV_PIX_FMT_GRAY8,
+    'YUV420P': AV_PIX_FMT_YUV420P
 }
 
 cdef class VideoStream:
@@ -69,6 +69,9 @@ cdef class VideoStream:
     cdef int frameno
     cdef AVFrame *frame
     cdef int64_t _frame_pts
+
+    cdef int64_t last_pts
+    cdef int64_t skipped_pts
     
     cdef uint8_t *video_dst_data[4]
     cdef int      video_dst_linesize[4]
@@ -76,6 +79,7 @@ cdef class VideoStream:
     cdef int ffmpeg_frame_mode
     cdef object __frame_mode
     cdef int got_frame
+    cdef int flushing_cache
 
     # public
     cdef readonly object filename
@@ -131,12 +135,15 @@ cdef class VideoStream:
                   scale_mode=BICUBIC, seek_mode=SEEK_BACKWARD, exact_seek=True):
         self.format_ctx = NULL
         self.codec_ctx = NULL
-        self.frame = avcodec_alloc_frame()
+        self.frame = av_frame_alloc()
         self.duration = 0
         self.width = 0
         self.height = 0
         self.frameno = 0
         self.streamno = -1
+        self.flushing_cache = 0
+        self.last_pts = 0
+        self.skipped_pts = 0
         #self.video_dst_data = {NULL}
 
     def __init__(self, filename, frame_size=None, frame_mode='RGB',
@@ -152,6 +159,11 @@ cdef class VideoStream:
         self.seek_mode = seek_mode
         self.exact_seek = exact_seek
         self.frame_size = (-1,-1)
+
+        self.got_frame = 0
+        self.flushing_cache = 0
+        self.last_pts = 0
+        self.skipped_pts = 0
         
         self.initVideoStream()
         
@@ -186,7 +198,7 @@ cdef class VideoStream:
         #                     video_dec_ctx->pix_fmt, 1);
         # ?
         
-        self.frame = avcodec_alloc_frame()
+        self.frame = av_frame_alloc()
         
         av_init_packet(&self.packet)
         
@@ -237,7 +249,7 @@ cdef class VideoStream:
         self.codec_name = self.codec.name
         self.bitrate = self.format_ctx.bit_rate
 
-        self.__decode_next_frame()
+        # self.__decode_next_frame()
 
     def __dealloc__(self):
         if self.packet.data:
@@ -282,24 +294,29 @@ cdef class VideoStream:
                             self.codec_ctx.width, 
                             self.codec_ctx.height)
                 
-                self.packet.data += self.packet.size
-                self.packet.size -= self.packet.size
+                # print "ret top", ret
+                # self.packet.data += ret #self.packet.size
+                # print "packet size before decrement top", self.packet.size 
+                # self.packet.size -= ret#self.packet.size
                 
                 #print "self.got_frame"
                 #break
+
             
-            if ret <= 0:
-                # 
-                #print "ret <= 0"
-                #break              
-                pass
-            else:
-                # getting over packages that are headers or something
-                # like that.
-                #print "else"
-                self.frame_offset += 1
-                self.packet.data += self.packet.size
-                self.packet.size -= self.packet.size
+            # if ret <= 0:
+            #     # 
+            #     #print "ret <= 0"
+            #     #break              
+            #     pass
+            # else:
+            #     # getting over packages that are headers or something
+            #     # like that.
+            #     #print "else"
+            #     self.frame_offset += 1
+            #     print "ret", ret
+            #     self.packet.data += self.packet.size
+            #     print "packet size before decrement", self.packet.size 
+            #     self.packet.size -= self.packet.size
                                
         return decoded
     
@@ -307,49 +324,133 @@ cdef class VideoStream:
         cdef int ret
         cdef int frame_finished = 0
         cdef int64_t pts
-        
+        cdef AVPacket orig_pkt
+
         self.got_frame = 0
-        while not self.got_frame:
-            if self.packet.size <= 0:
-                ret = av_read_frame(self.format_ctx, &self.packet)
-                if ret < 0 and not self.got_frame:                
-                    raise NoMoreData("Unable to read frame. [%d]" % ret)
-                elif ret < 0 and self.got_frame:                
-                    # flush cached frames
-                    self.packet.data = NULL
-                    self.packet.size = 0
-                    self.__decode_packet(1)
-                    
-                else:            
+        self.last_pts = int(self.frame.pts)
+        print "last_pts", self.last_pts 
+
+
+        if not self.flushing_cache:
+            print 'not flushing'
+            if self.packet.size > 0:
+                print 'not reading new frame'
+                continue_decoding = 1
+            else:
+                print 'reading new frame'
+                continue_decoding = av_read_frame(self.format_ctx, &self.packet) >= 0
+
+            print 'continue_decoding? ', continue_decoding
+
+            if continue_decoding:
+                orig_pkt = self.packet
+
+                while not self.got_frame:
+                    print 'did not get frame, read again..'
                     ret = self.__decode_packet(0)
-            else:            
-                ret = self.__decode_packet(0)
+
+                    if not self.got_frame:
+                        self.skipped_pts += av_rescale(1,
+                                              self.stream.r_frame_rate.den*AV_TIME_BASE,
+                                              self.stream.r_frame_rate.num)
+                        print "skipped_pts", self.skipped_pts
+                        if not av_read_frame(self.format_ctx, &self.packet) >= 0:
+                            break
+
+                if ret > 0:
+                    self.packet.data += ret
+                    self.packet.size -= ret
+
+                    if self.packet.pts == AV_NOPTS_VALUE:
+                        print 'using dts'
+                        pts = self.packet.dts   
+                    else:
+                        print 'using pts'
+                        pts = self.packet.pts
+
+                    print 'dts before',  self.packet.dts
+                    print 'pts before',  self.packet.pts
+                    print 'coded_picture_number before: ', self.frame.coded_picture_number
+                    print 'stream.start_time', self.stream.start_time
+                    # print 'stream timebase', self.stream.time_base
+                    # print 'AV_TIME_BASE_Q', AV_TIME_BASE_Q
+
+                    self.frame.pts = av_rescale_q(pts-self.stream.start_time,
+                                                  self.stream.time_base, AV_TIME_BASE_Q) - \
+                                     self.skipped_pts
+                    # print 'pts middle', self.frame.pts
+                    self.frame.display_picture_number = <int>av_q2d(
+                        av_mul_q(av_mul_q(AVRational(pts - self.stream.start_time, 1),
+                                          self.stream.r_frame_rate),
+                                 self.stream.time_base)
+                    )
+
+                    print 'pts', self.frame.pts
+                    # print 'display_picture_number: ', self.frame.display_picture_number
+                    print 'coded_picture_number: ', self.frame.coded_picture_number
+                    print '--------------------------'
+
+                    self.last_pts = int(self.frame.pts)
+                    return self.frame.pts
             
-            if not self.got_frame:
-                av_free_packet(&self.packet)
-            
-        if self.got_frame == 0:
+                else:# self.packet.size <= 0:
+                    av_free_packet(&orig_pkt)
+
+            # flush cached frames
+            self.packet.data = NULL
+            self.packet.size = 0;
+            self.flushing_cache = 1
+
+        print 'flushing'
+        self.__decode_packet(1)
+
+        if not self.got_frame:
             raise NoMoreData("Unable to read frame. Reached probably end of stream")
-            
-        if self.packet.pts == AV_NOPTS_VALUE:
-            pts = self.packet.dts
+
         else:
-            pts = self.packet.pts
+            if self.packet.pts == AV_NOPTS_VALUE:
+                pts = self.packet.dts   
+            else:
+                pts = self.packet.pts
+
+            if pts <= 0:
+                print 'pts <= 0'
+                print 'single frame pts', av_rescale(1,
+                                      self.stream.r_frame_rate.den*AV_TIME_BASE,
+                                      self.stream.r_frame_rate.num)
+                print 'last_pts before', self.last_pts
+                pts  = self.last_pts + av_rescale(1,
+                                      self.stream.r_frame_rate.den*AV_TIME_BASE,
+                                      self.stream.r_frame_rate.num)
+
+                self.frame.pts = pts
+            else:
+                print 'pts before',  pts
+                # print 'dts before', self.packet.dts
+                print 'coded_picture_number before: ', self.frame.coded_picture_number
+                self.frame.pts = av_rescale_q(pts-self.stream.start_time,
+                                              self.stream.time_base, AV_TIME_BASE_Q) - \
+                                 self.skipped_pts
+                    
+            # print 'stream timebase', self.stream.time_base
+            # print 'AV_TIME_BASE_Q', AV_TIME_BASE_Q
+
+            # print 'pts middle', self.frame.pts     
+            self.frame.display_picture_number = <int>av_q2d(
+                av_mul_q(av_mul_q(AVRational(pts - self.stream.start_time, 1),
+                                  self.stream.r_frame_rate),
+                         self.stream.time_base)
+            )
+            print 'pts', self.frame.pts
+            # print 'display_picture_number: ', self.frame.display_picture_number
+            print 'coded_picture_number: ', self.frame.coded_picture_number
+            print '--------------------------'
+
+            self.last_pts = int(self.frame.pts)
+            return self.frame.pts
 
 
-#        print "frame>> pict_type=%s" % "*IPBSip"[self.frame.pict_type],
-#        print "pts=%s, dts=%s, frameno=%s" % (pts, self.packet.dts, self.frameno),
-#        print "ts=%.3f" % av_q2d(av_mul_q(AVRational(pts-self.stream.start_time, 1), self.stream.time_base))
-
-        self.frame.pts = av_rescale_q(pts-self.stream.start_time,
-                                      self.stream.time_base, AV_TIME_BASE_Q)
-        self.frame.display_picture_number = <int>av_q2d(
-            av_mul_q(av_mul_q(AVRational(pts - self.stream.start_time, 1),
-                              self.stream.r_frame_rate),
-                     self.stream.time_base)
-        )
-        return self.frame.pts
-    
+   
 
     def dump_next_frame(self):
         pts = self.__decode_next_frame()
@@ -365,7 +466,7 @@ cdef class VideoStream:
         cdef char *data_ptr
         cdef SwsContext *img_convert_ctx
 
-        scaled_frame = avcodec_alloc_frame()
+        scaled_frame = av_frame_alloc()
         if scaled_frame == NULL:
             raise MemoryError("Unable to allocate new frame")
 
@@ -408,6 +509,10 @@ cdef class VideoStream:
         cdef int ret
         cdef int64_t stream_pts
 
+        self.flushing_cache = 0
+        self.skipped_pts = 0
+        print 'seek to pts:', pts
+
         stream_pts = av_rescale_q(pts, AV_TIME_BASE_Q, self.stream.time_base) + \
                     self.stream.start_time
         ret = av_seek_frame(self.format_ctx, self.streamno, stream_pts,
@@ -417,18 +522,21 @@ cdef class VideoStream:
         avcodec_flush_buffers(self.codec_ctx)
 
         # if we hurry it we can get bad frames later in the GOP
-        self.codec_ctx.skip_idct = AVDISCARD_BIDIR
-        self.codec_ctx.skip_frame = AVDISCARD_BIDIR
+        # self.codec_ctx.skip_idct = AVDISCARD_BIDIR
+        # self.codec_ctx.skip_frame = AVDISCARD_BIDIR
 
-        #self.codec_ctx.hurry_up = 1
+        # self.codec_ctx.hurry_up = 1
         hurried_frames = 0
         while self.__decode_next_frame() < pts:
-            pass
+            if self.frame.pts < 0:
+                self.get_frame_at_pts(pts - av_rescale(1,
+                                      self.stream.r_frame_rate.den*AV_TIME_BASE,
+                                      self.stream.r_frame_rate.num))
 
-        #self.codec_ctx.hurry_up = 0
+        # self.codec_ctx.hurry_up = 0
 
-        self.codec_ctx.skip_idct = AVDISCARD_DEFAULT
-        self.codec_ctx.skip_frame = AVDISCARD_DEFAULT
+        # self.codec_ctx.skip_idct = AVDISCARD_DEFAULT
+        # self.codec_ctx.skip_frame = AVDISCARD_DEFAULT
 
         return self.current()
 
@@ -445,7 +553,8 @@ cdef class VideoStream:
         try:
             ret = self.__decode_next_frame()
         except (NoMoreData), e:
-            raise StopIteration
+            print e
+            raise StopIteration(e)
                 
         return self.current()
 

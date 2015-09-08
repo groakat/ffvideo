@@ -65,6 +65,7 @@ setup(
                   #                LIBPATH + "libavutil.a", LIBPATH + "libavdevice.a", 
                   #                LIBPATH + "libavformat.a", LIBPATH + "libpostproc.a",
                   #                LIBPATH + "libswresample.a", LIBPATH + "libswscale.a"]
+                  # extra_link_args=['-static'],
                   )
     ],
     cmdclass=cmdclass,

@@ -17,8 +17,28 @@ def read(fn):
 VERSION = "0.0.14"
 
 if platform.system() == 'Linux':
-        include_dirs = ["/usr/include/ffmpeg"]
-        library_dirs = []        
+        #include_dirs = ["/home/peter/ffmpeg_build_shared/lib/", "/usr/include/ffmpeg"]
+        #library_dirs = ["/home/peter/ffmpeg_build_shared/include/"]                
+    #p = os.environ['PATH']
+    #include_dirs = [os.path.join(x, '..', 'include') for x in p.split(':')]
+    #library_dirs = [os.path.join(x, '..', 'lib') for x in p.split(':')]
+    try:
+        # for build with conda
+        include_dirs = [os.path.join(os.environ['PREFIX'],
+                         'include')]
+        library_dirs = [os.path.join(os.environ['PREFIX'],
+                         'lib')]
+    except KeyError: 
+        include_dirs = []
+        library_dirs = []
+        
+    p = os.environ['PATH']
+    include_dirs += [os.path.join(x, '..', 'include') for x in p.split(':')]
+    library_dirs += [os.path.join(x, '..', 'lib') for x in p.split(':')]
+    
+    include_dirs += ['/home/ucabpre/usr/include']
+    library_dirs += ['/home/ucabpre/usr/lib']
+        
 elif platform.system() == 'Darwin':
     p = os.environ['PATH']
     include_dirs = [os.path.join(x, '..', 'include') for x in p.split(':')]

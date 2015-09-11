@@ -19,6 +19,11 @@
 
 from ffmpeg cimport *
 
+
+import numpy
+cimport numpy
+
+
 cdef extern from "Python.h":
     object PyBuffer_New(int)
     object PyBuffer_FromObject(object, int, int)
@@ -76,7 +81,6 @@ cdef class VideoStream:
     cdef uint8_t *video_dst_data[4]
     cdef int      video_dst_linesize[4]
 
-    cdef int ffmpeg_frame_mode
     cdef object __frame_mode
     cdef int got_frame
     cdef int flushing_cache
@@ -98,6 +102,8 @@ cdef class VideoStream:
     cdef public int scale_mode
     cdef public int seek_mode
     cdef public int exact_seek
+
+    cdef public int ffmpeg_frame_mode
 
     property frame_mode:
         def __set__(self, mode):
@@ -252,15 +258,23 @@ cdef class VideoStream:
         # self.__decode_next_frame()
 
     def __dealloc__(self):
+        # print "__dealloc__"
         if self.packet.data:
             av_free_packet(&self.packet)
 
+
+        # print "__dealloc__ frame"
         av_free(self.frame)
+
+        # print "__dealloc__ end frame"
+
         if self.codec:
             avcodec_close(self.codec_ctx)
             self.codec_ctx = NULL
         if self.format_ctx:
             avformat_close_input(&self.format_ctx)
+
+        # print "end __dealloc__"
 
     def dump(self):
         print "max_b_frames=%s" % self.codec_ctx.max_b_frames
@@ -326,34 +340,27 @@ cdef class VideoStream:
         cdef int64_t pts
         cdef AVPacket orig_pkt
 
+        orig_pkt = self.packet  
         self.got_frame = 0
         self.last_pts = int(self.frame.pts)
-        print "last_pts", self.last_pts 
 
 
         if not self.flushing_cache:
-            print 'not flushing'
             if self.packet.size > 0:
-                print 'not reading new frame'
                 continue_decoding = 1
             else:
-                print 'reading new frame'
                 continue_decoding = av_read_frame(self.format_ctx, &self.packet) >= 0
 
-            print 'continue_decoding? ', continue_decoding
 
             if continue_decoding:
-                orig_pkt = self.packet
 
                 while not self.got_frame:
-                    print 'did not get frame, read again..'
                     ret = self.__decode_packet(0)
 
                     if not self.got_frame:
                         self.skipped_pts += av_rescale(1,
                                               self.stream.r_frame_rate.den*AV_TIME_BASE,
                                               self.stream.r_frame_rate.num)
-                        print "skipped_pts", self.skipped_pts
                         if not av_read_frame(self.format_ctx, &self.packet) >= 0:
                             break
 
@@ -362,18 +369,9 @@ cdef class VideoStream:
                     self.packet.size -= ret
 
                     if self.packet.pts == AV_NOPTS_VALUE:
-                        print 'using dts'
                         pts = self.packet.dts   
                     else:
-                        print 'using pts'
                         pts = self.packet.pts
-
-                    print 'dts before',  self.packet.dts
-                    print 'pts before',  self.packet.pts
-                    print 'coded_picture_number before: ', self.frame.coded_picture_number
-                    print 'stream.start_time', self.stream.start_time
-                    # print 'stream timebase', self.stream.time_base
-                    # print 'AV_TIME_BASE_Q', AV_TIME_BASE_Q
 
                     self.frame.pts = av_rescale_q(pts-self.stream.start_time,
                                                   self.stream.time_base, AV_TIME_BASE_Q) - \
@@ -385,26 +383,23 @@ cdef class VideoStream:
                                  self.stream.time_base)
                     )
 
-                    print 'pts', self.frame.pts
-                    # print 'display_picture_number: ', self.frame.display_picture_number
-                    print 'coded_picture_number: ', self.frame.coded_picture_number
-                    print '--------------------------'
-
                     self.last_pts = int(self.frame.pts)
+                    av_free_packet(&orig_pkt)
                     return self.frame.pts
             
                 else:# self.packet.size <= 0:
-                    av_free_packet(&orig_pkt)
+                    # av_free_packet(&orig_pkt)
+                    pass
 
             # flush cached frames
             self.packet.data = NULL
             self.packet.size = 0;
             self.flushing_cache = 1
 
-        print 'flushing'
         self.__decode_packet(1)
 
         if not self.got_frame:
+            av_free_packet(&orig_pkt)
             raise NoMoreData("Unable to read frame. Reached probably end of stream")
 
         else:
@@ -414,39 +409,24 @@ cdef class VideoStream:
                 pts = self.packet.pts
 
             if pts <= 0:
-                print 'pts <= 0'
-                print 'single frame pts', av_rescale(1,
-                                      self.stream.r_frame_rate.den*AV_TIME_BASE,
-                                      self.stream.r_frame_rate.num)
-                print 'last_pts before', self.last_pts
                 pts  = self.last_pts + av_rescale(1,
                                       self.stream.r_frame_rate.den*AV_TIME_BASE,
                                       self.stream.r_frame_rate.num)
 
                 self.frame.pts = pts
             else:
-                print 'pts before',  pts
-                # print 'dts before', self.packet.dts
-                print 'coded_picture_number before: ', self.frame.coded_picture_number
                 self.frame.pts = av_rescale_q(pts-self.stream.start_time,
                                               self.stream.time_base, AV_TIME_BASE_Q) - \
                                  self.skipped_pts
                     
-            # print 'stream timebase', self.stream.time_base
-            # print 'AV_TIME_BASE_Q', AV_TIME_BASE_Q
-
-            # print 'pts middle', self.frame.pts     
             self.frame.display_picture_number = <int>av_q2d(
                 av_mul_q(av_mul_q(AVRational(pts - self.stream.start_time, 1),
                                   self.stream.r_frame_rate),
                          self.stream.time_base)
             )
-            print 'pts', self.frame.pts
-            # print 'display_picture_number: ', self.frame.display_picture_number
-            print 'coded_picture_number: ', self.frame.coded_picture_number
-            print '--------------------------'
 
             self.last_pts = int(self.frame.pts)
+            av_free_packet(&orig_pkt)
             return self.frame.pts
 
 
@@ -461,6 +441,10 @@ cdef class VideoStream:
               (self.frame.coded_picture_number, self.frame.display_picture_number)
 
     def current(self):        
+
+        #################
+        # all of this method needs to go into the VideoFrame constructor, so that the 
+        # scaled frame can be handled / freed by it rather than from the outside
         cdef AVFrame *scaled_frame
         cdef Py_ssize_t buflen
         cdef char *data_ptr
@@ -489,12 +473,27 @@ cdef class VideoStream:
                 scaled_frame.data, scaled_frame.linesize)
 
             sws_freeContext(img_convert_ctx)
-            av_free(scaled_frame)
-            
+            # av_free(scaled_frame)
 
-        return VideoFrame(data, self.frame_size, self.frame_mode,
+
+        if self.frame_mode == 'RGB':
+            shape = (self.height, self.width, 3)
+        elif self.frame_mode == 'L':
+            shape = (self.height, self.width)
+        array = numpy.ndarray(buffer=data, dtype=numpy.uint8, shape=shape).copy()
+
+        with nogil:            
+            av_free(scaled_frame)
+
+        vf = VideoFrame(array, self.frame_size, self.frame_mode,
                           timestamp=<double>self.frame.pts/<double>AV_TIME_BASE,
                           frameno=self.frame.display_picture_number)
+
+
+        # with nogil:
+
+        return vf
+
 
     def get_frame_no(self, frameno):
         cdef int64_t gpts = av_rescale(frameno,
@@ -506,12 +505,16 @@ cdef class VideoStream:
         return self.get_frame_at_pts(<int64_t>(timestamp * AV_TIME_BASE))
 
     def get_frame_at_pts(self, int64_t pts):
+        av_free(self.frame)
+        
+        self.frame = av_frame_alloc()
+        
         cdef int ret
         cdef int64_t stream_pts
 
         self.flushing_cache = 0
         self.skipped_pts = 0
-        print 'seek to pts:', pts
+        # print 'seek to pts:', pts
 
         stream_pts = av_rescale_q(pts, AV_TIME_BASE_Q, self.stream.time_base) + \
                     self.stream.start_time
@@ -542,6 +545,12 @@ cdef class VideoStream:
 
     def __iter__(self):
         # rewind
+        self.flushing_cache = 0
+        self.skipped_pts = 0
+
+
+        # av_free(self.frame)
+
         ret = av_seek_frame(self.format_ctx, self.streamno,
                             self.stream.start_time, self.seek_mode)
         if ret < 0:
@@ -553,7 +562,6 @@ cdef class VideoStream:
         try:
             ret = self.__decode_next_frame()
         except (NoMoreData), e:
-            print e
             raise StopIteration(e)
                 
         return self.current()
@@ -574,36 +582,54 @@ cdef class VideoFrame:
     cdef readonly int frameno
     cdef readonly double timestamp
 
-    cdef readonly object data
+    cdef numpy.ndarray array
 
-    def __init__(self, data, size, mode, timestamp=0, frameno=0):
-        self.data = data
+    # cdef readonly object data
+
+
+    def __init__(self, array, size, mode, timestamp=0, frameno=0):
+        # self.data = data
+        self.array = array
         self.width, self.height = size
         self.size = size
         self.mode = mode
         self.timestamp = timestamp
         self.frameno = frameno
 
-    def image(self):
-        if self.mode not in ('RGB', 'L', 'F'):
-            raise FFVideoError('Cannot represent this color mode into PIL Image')
 
-        try:
-            import Image
-        except ImportError:
-            from PIL import Image
-        return Image.frombuffer(self.mode, self.size, self.data, 'raw', self.mode, 0, 1)
+
+
+    def set_data(self, data):
+        self.data = data
+
+
+    def __dealloc__(self):
+        # av_free(self.scaled_frame)
+        pass
+
+    # def image(self):
+    #     if self.mode not in ('RGB', 'L', 'F'):
+    #         raise FFVideoError('Cannot represent this color mode into PIL Image')
+
+    #     try:
+    #         import Image
+    #     except ImportError:
+    #         from PIL import Image
+    #     return Image.frombuffer(self.mode, self.size, self.data, 'raw', self.mode, 0, 1)
+        # return 'lalala'
 
     def ndarray(self):
         if self.mode not in ('RGB', 'L'):
             raise FFVideoError('Cannot represent this color mode into PIL Image')
 
-        import numpy
-        if self.mode == 'RGB':
-            shape = (self.height, self.width, 3)
-        elif self.mode == 'L':
-            shape = (self.height, self.width)
-        return numpy.ndarray(buffer=self.data, dtype=numpy.uint8, shape=shape)
+        return self.array
+        # return "lalala"
+        # import numpy
+        # if self.mode == 'RGB':
+        #     shape = (self.height, self.width, 3)
+        # elif self.mode == 'L':
+        #     shape = (self.height, self.width)
+        # return numpy.ndarray(buffer=self.data, dtype=numpy.uint8, shape=shape)
 
 
 

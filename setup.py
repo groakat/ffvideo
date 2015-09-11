@@ -1,5 +1,6 @@
 import os
 import platform
+import numpy
 from distutils.core import setup, Extension
 
 try:
@@ -46,6 +47,8 @@ else:
 
 LIBPATH = '/Users/peter/anaconda/lib/'
 
+print library_dirs
+
 setup(
     name="FFVideo",
     version=VERSION,
@@ -53,13 +56,14 @@ setup(
     long_description=read("README.txt"),
     ext_modules=[
         Extension("ffvideo", sources,
-                  include_dirs=include_dirs,
+                  include_dirs=include_dirs + [numpy.get_include()],
                   libraries=["avformat", "avcodec", "swscale", "avutil"],
                   #libraries=[LIBPATH + "libavformat",LIBPATH +  "libavcodec",LIBPATH +  "libswscale",
                   #                LIBPATH + "libavutil", LIBPATH + "libavdevice", 
                   #                LIBPATH + "libavformat", LIBPATH + "libpostproc",
                   #                LIBPATH + "libswresample", LIBPATH + "libswscale"],
                   library_dirs=library_dirs,
+                  extra_compile_args=['-g']
                   #language='c++',
                   #extra_objects=[LIBPATH + "libavformat.a",LIBPATH +  "libavcodec.a",LIBPATH +  "libswscale.a",
                   #                LIBPATH + "libavutil.a", LIBPATH + "libavdevice.a", 

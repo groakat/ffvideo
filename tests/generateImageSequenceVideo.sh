@@ -17,7 +17,8 @@ done
 
 
 # render video
-ffmpeg -y -f image2 -r 30 -i $RAW"%/05d.png" -r 30 $MOVIE"/test.avi"
+ffmpeg -y -f image2 -r 30 -i $RAW"/%05d.png" -r 30 $MOVIE"/test.avi"
+ffmpeg -y -f image2 -r 30 -i $RAW"/%05d.png"  -c:v libx264 -crf 18 -g 1 -r 30 -r 30 $MOVIE"/test.mp4"
 
 # extract individual frames with ffmpeg
-ffmpeg -i -start_number 0 $MOVIE"/test.avi" -an -f image2 $FFMPEG_SEQ"/output_%05d.png"
+ffmpeg -i $MOVIE"/test.avi" -an -f image2 -start_number 0 $FFMPEG_SEQ"/output_%05d.png"

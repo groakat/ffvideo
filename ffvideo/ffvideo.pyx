@@ -364,7 +364,7 @@ cdef class VideoStream:
                         if not av_read_frame(self.format_ctx, &self.packet) >= 0:
                             break
 
-                if ret > 0:
+                if ret > 0 and self.got_frame:
                     self.packet.data += ret
                     self.packet.size -= ret
 
@@ -504,32 +504,39 @@ cdef class VideoStream:
     def get_frame_at_sec(self, float timestamp):
         return self.get_frame_at_pts(<int64_t>(timestamp * AV_TIME_BASE))
 
+
     def get_frame_at_pts(self, int64_t pts):
-        av_free(self.frame)
-        
-        self.frame = av_frame_alloc()
-        
         cdef int ret
         cdef int64_t stream_pts
 
         self.flushing_cache = 0
         self.skipped_pts = 0
-        # print 'seek to pts:', pts
 
         stream_pts = av_rescale_q(pts, AV_TIME_BASE_Q, self.stream.time_base) + \
                     self.stream.start_time
-        ret = av_seek_frame(self.format_ctx, self.streamno, stream_pts,
-                            self.seek_mode)
+
+        # AVSEEK_FLAG_ANY does not guarantee a keyframe is returned
+        # but (IMPORTANT) it is the only flag that returns < 0 if seeked outside of
+        # frame range of videos
+        ret = av_seek_frame(self.format_ctx, self.streamno, stream_pts, AVSEEK_FLAG_ANY)
         if ret < 0:
             raise FFVideoError("Unable to seek: %d" % ret)
+        # avcodec_flush_buffers(self.codec_ctx)
+
+        # we have to seek again for frame accuracy and ensuring that a keyframe is decoded as well
+        ret = av_seek_frame(self.format_ctx, self.streamno, stream_pts, self.seek_mode)
         avcodec_flush_buffers(self.codec_ctx)
 
         # if we hurry it we can get bad frames later in the GOP
         # self.codec_ctx.skip_idct = AVDISCARD_BIDIR
         # self.codec_ctx.skip_frame = AVDISCARD_BIDIR
 
+        # self.codec_ctx.skip_idct = AVDISCARD_NONREF
+        # self.codec_ctx.skip_frame = AVDISCARD_NONREF
+
         # self.codec_ctx.hurry_up = 1
         hurried_frames = 0
+        # self.__decode_next_frame()
         while self.__decode_next_frame() < pts:
             if self.frame.pts < 0:
                 self.get_frame_at_pts(pts - av_rescale(1,
@@ -601,6 +608,7 @@ cdef class VideoFrame:
 
     def set_data(self, data):
         self.data = data
+
 
 
     def __dealloc__(self):

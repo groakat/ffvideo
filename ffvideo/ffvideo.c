@@ -766,7 +766,7 @@ struct __pyx_obj_7ffvideo_VideoStream {
 };
 
 
-/* "ffvideo.pyx":583
+/* "ffvideo.pyx":595
  * 
  * 
  * cdef class VideoFrame:             # <<<<<<<<<<<<<<
@@ -1175,11 +1175,12 @@ static PyObject *__pyx_pf_7ffvideo_11VideoStream_14dump_next_frame(struct __pyx_
 static PyObject *__pyx_pf_7ffvideo_11VideoStream_16current(struct __pyx_obj_7ffvideo_VideoStream *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_7ffvideo_11VideoStream_18get_frame_no(struct __pyx_obj_7ffvideo_VideoStream *__pyx_v_self, PyObject *__pyx_v_frameno); /* proto */
 static PyObject *__pyx_pf_7ffvideo_11VideoStream_20get_frame_at_sec(struct __pyx_obj_7ffvideo_VideoStream *__pyx_v_self, float __pyx_v_timestamp); /* proto */
-static PyObject *__pyx_pf_7ffvideo_11VideoStream_22get_frame_at_pts(struct __pyx_obj_7ffvideo_VideoStream *__pyx_v_self, __pyx_t_6ffmpeg_int64_t __pyx_v_pts); /* proto */
-static PyObject *__pyx_pf_7ffvideo_11VideoStream_24__iter__(struct __pyx_obj_7ffvideo_VideoStream *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_7ffvideo_11VideoStream_26__next__(struct __pyx_obj_7ffvideo_VideoStream *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_7ffvideo_11VideoStream_28__getitem__(struct __pyx_obj_7ffvideo_VideoStream *__pyx_v_self, PyObject *__pyx_v_frameno); /* proto */
-static PyObject *__pyx_pf_7ffvideo_11VideoStream_30__repr__(struct __pyx_obj_7ffvideo_VideoStream *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_7ffvideo_11VideoStream_22print_decode_next_frame(struct __pyx_obj_7ffvideo_VideoStream *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_7ffvideo_11VideoStream_24get_frame_at_pts(struct __pyx_obj_7ffvideo_VideoStream *__pyx_v_self, __pyx_t_6ffmpeg_int64_t __pyx_v_pts); /* proto */
+static PyObject *__pyx_pf_7ffvideo_11VideoStream_26__iter__(struct __pyx_obj_7ffvideo_VideoStream *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_7ffvideo_11VideoStream_28__next__(struct __pyx_obj_7ffvideo_VideoStream *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_7ffvideo_11VideoStream_30__getitem__(struct __pyx_obj_7ffvideo_VideoStream *__pyx_v_self, PyObject *__pyx_v_frameno); /* proto */
+static PyObject *__pyx_pf_7ffvideo_11VideoStream_32__repr__(struct __pyx_obj_7ffvideo_VideoStream *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_7ffvideo_11VideoStream_8filename___get__(struct __pyx_obj_7ffvideo_VideoStream *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_7ffvideo_11VideoStream_10codec_name___get__(struct __pyx_obj_7ffvideo_VideoStream *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_7ffvideo_11VideoStream_7bitrate___get__(struct __pyx_obj_7ffvideo_VideoStream *__pyx_v_self); /* proto */
@@ -1274,12 +1275,14 @@ static char __pyx_k_timestamp[] = "timestamp";
 static char __pyx_k_NoMoreData[] = "NoMoreData";
 static char __pyx_k_SEEK_FRAME[] = "SEEK_FRAME";
 static char __pyx_k_ValueError[] = "ValueError";
+static char __pyx_k_after_seek[] = "after seek";
 static char __pyx_k_exact_seek[] = "exact_seek";
 static char __pyx_k_frame_mode[] = "frame_mode";
 static char __pyx_k_frame_size[] = "frame_size";
 static char __pyx_k_scale_mode[] = "scale_mode";
 static char __pyx_k_FRAME_MODES[] = "FRAME_MODES";
 static char __pyx_k_MemoryError[] = "MemoryError";
+static char __pyx_k_before_seek[] = "before seek";
 static char __pyx_k_DecoderError[] = "DecoderError";
 static char __pyx_k_FFVideoError[] = "FFVideoError";
 static char __pyx_k_RuntimeError[] = "RuntimeError";
@@ -1300,6 +1303,7 @@ static char __pyx_k_Unable_to_rewind_d[] = "Unable to rewind: %d";
 static char __pyx_k_Unable_to_open_codec[] = "Unable to open codec";
 static char __pyx_k_Unable_to_get_decoder[] = "Unable to get decoder";
 static char __pyx_k_Unable_to_open_file_s[] = "Unable to open file %s";
+static char __pyx_k_print_decode_next_frame[] = "print_decode_next_frame";
 static char __pyx_k_Not_supported_frame_mode[] = "Not supported frame mode";
 static char __pyx_k_codec_ctx_frame_number_s[] = "codec_ctx.frame_number=%s";
 static char __pyx_k_Unable_to_find_video_stream[] = "Unable to find video stream";
@@ -1355,7 +1359,9 @@ static PyObject *__pyx_n_s_ValueError;
 static PyObject *__pyx_kp_s_VideoStream_s_4f;
 static PyObject *__pyx_kp_s_Video_width_height_is_0_cannot_d;
 static PyObject *__pyx_n_s_YUV420P;
+static PyObject *__pyx_kp_s_after_seek;
 static PyObject *__pyx_n_s_array;
+static PyObject *__pyx_kp_s_before_seek;
 static PyObject *__pyx_kp_s_both_width_and_height_cannot_be;
 static PyObject *__pyx_n_s_buffer;
 static PyObject *__pyx_kp_s_codec_ctx_frame_number_s;
@@ -1393,6 +1399,7 @@ static PyObject *__pyx_n_s_num;
 static PyObject *__pyx_n_s_numpy;
 static PyObject *__pyx_n_s_prepare;
 static PyObject *__pyx_n_s_print;
+static PyObject *__pyx_n_s_print_decode_next_frame;
 static PyObject *__pyx_kp_s_pts_d_frameno_d;
 static PyObject *__pyx_n_s_qualname;
 static PyObject *__pyx_n_s_range;
@@ -5157,14 +5164,120 @@ static PyObject *__pyx_pf_7ffvideo_11VideoStream_20get_frame_at_sec(struct __pyx
 /* "ffvideo.pyx":508
  * 
  * 
+ *     def print_decode_next_frame(self):             # <<<<<<<<<<<<<<
+ *         res = self.__decode_next_frame()
+ *         print res
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_7ffvideo_11VideoStream_23print_decode_next_frame(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_7ffvideo_11VideoStream_23print_decode_next_frame(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("print_decode_next_frame (wrapper)", 0);
+  __pyx_r = __pyx_pf_7ffvideo_11VideoStream_22print_decode_next_frame(((struct __pyx_obj_7ffvideo_VideoStream *)__pyx_v_self));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_7ffvideo_11VideoStream_22print_decode_next_frame(struct __pyx_obj_7ffvideo_VideoStream *__pyx_v_self) {
+  PyObject *__pyx_v_res = NULL;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("print_decode_next_frame", 0);
+
+  /* "ffvideo.pyx":509
+ * 
+ *     def print_decode_next_frame(self):
+ *         res = self.__decode_next_frame()             # <<<<<<<<<<<<<<
+ *         print res
+ * 
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_decode_next_frame); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 509; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = NULL;
+  if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_3)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_3);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  if (__pyx_t_3) {
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 509; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  } else {
+    __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 509; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  }
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_v_res = __pyx_t_1;
+  __pyx_t_1 = 0;
+
+  /* "ffvideo.pyx":510
+ *     def print_decode_next_frame(self):
+ *         res = self.__decode_next_frame()
+ *         print res             # <<<<<<<<<<<<<<
+ * 
+ *         return res
+ */
+  if (__Pyx_PrintOne(0, __pyx_v_res) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 510; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+  /* "ffvideo.pyx":512
+ *         print res
+ * 
+ *         return res             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __Pyx_INCREF(__pyx_v_res);
+  __pyx_r = __pyx_v_res;
+  goto __pyx_L0;
+
+  /* "ffvideo.pyx":508
+ * 
+ * 
+ *     def print_decode_next_frame(self):             # <<<<<<<<<<<<<<
+ *         res = self.__decode_next_frame()
+ *         print res
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_AddTraceback("ffvideo.VideoStream.print_decode_next_frame", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XDECREF(__pyx_v_res);
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "ffvideo.pyx":515
+ * 
+ * 
  *     def get_frame_at_pts(self, int64_t pts):             # <<<<<<<<<<<<<<
  *         cdef int ret
  *         cdef int64_t stream_pts
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7ffvideo_11VideoStream_23get_frame_at_pts(PyObject *__pyx_v_self, PyObject *__pyx_arg_pts); /*proto*/
-static PyObject *__pyx_pw_7ffvideo_11VideoStream_23get_frame_at_pts(PyObject *__pyx_v_self, PyObject *__pyx_arg_pts) {
+static PyObject *__pyx_pw_7ffvideo_11VideoStream_25get_frame_at_pts(PyObject *__pyx_v_self, PyObject *__pyx_arg_pts); /*proto*/
+static PyObject *__pyx_pw_7ffvideo_11VideoStream_25get_frame_at_pts(PyObject *__pyx_v_self, PyObject *__pyx_arg_pts) {
   __pyx_t_6ffmpeg_int64_t __pyx_v_pts;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
@@ -5173,7 +5286,7 @@ static PyObject *__pyx_pw_7ffvideo_11VideoStream_23get_frame_at_pts(PyObject *__
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("get_frame_at_pts (wrapper)", 0);
   assert(__pyx_arg_pts); {
-    __pyx_v_pts = __Pyx_PyInt_As_signed__PY_LONG_LONG(__pyx_arg_pts); if (unlikely((__pyx_v_pts == (signed PY_LONG_LONG)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 508; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_pts = __Pyx_PyInt_As_signed__PY_LONG_LONG(__pyx_arg_pts); if (unlikely((__pyx_v_pts == (signed PY_LONG_LONG)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 515; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -5181,22 +5294,22 @@ static PyObject *__pyx_pw_7ffvideo_11VideoStream_23get_frame_at_pts(PyObject *__
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_7ffvideo_11VideoStream_22get_frame_at_pts(((struct __pyx_obj_7ffvideo_VideoStream *)__pyx_v_self), ((__pyx_t_6ffmpeg_int64_t)__pyx_v_pts));
+  __pyx_r = __pyx_pf_7ffvideo_11VideoStream_24get_frame_at_pts(((struct __pyx_obj_7ffvideo_VideoStream *)__pyx_v_self), ((__pyx_t_6ffmpeg_int64_t)__pyx_v_pts));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7ffvideo_11VideoStream_22get_frame_at_pts(struct __pyx_obj_7ffvideo_VideoStream *__pyx_v_self, __pyx_t_6ffmpeg_int64_t __pyx_v_pts) {
+static PyObject *__pyx_pf_7ffvideo_11VideoStream_24get_frame_at_pts(struct __pyx_obj_7ffvideo_VideoStream *__pyx_v_self, __pyx_t_6ffmpeg_int64_t __pyx_v_pts) {
   int __pyx_v_ret;
   __pyx_t_6ffmpeg_int64_t __pyx_v_stream_pts;
   CYTHON_UNUSED long __pyx_v_hurried_frames;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
-  int __pyx_t_1;
+  PyObject *__pyx_t_1 = NULL;
   PyObject *__pyx_t_2 = NULL;
-  PyObject *__pyx_t_3 = NULL;
+  int __pyx_t_3;
   PyObject *__pyx_t_4 = NULL;
   PyObject *__pyx_t_5 = NULL;
   PyObject *__pyx_t_6 = NULL;
@@ -5205,7 +5318,7 @@ static PyObject *__pyx_pf_7ffvideo_11VideoStream_22get_frame_at_pts(struct __pyx
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("get_frame_at_pts", 0);
 
-  /* "ffvideo.pyx":512
+  /* "ffvideo.pyx":519
  *         cdef int64_t stream_pts
  * 
  *         self.flushing_cache = 0             # <<<<<<<<<<<<<<
@@ -5214,7 +5327,7 @@ static PyObject *__pyx_pf_7ffvideo_11VideoStream_22get_frame_at_pts(struct __pyx
  */
   __pyx_v_self->flushing_cache = 0;
 
-  /* "ffvideo.pyx":513
+  /* "ffvideo.pyx":520
  * 
  *         self.flushing_cache = 0
  *         self.skipped_pts = 0             # <<<<<<<<<<<<<<
@@ -5223,7 +5336,7 @@ static PyObject *__pyx_pf_7ffvideo_11VideoStream_22get_frame_at_pts(struct __pyx
  */
   __pyx_v_self->skipped_pts = 0;
 
-  /* "ffvideo.pyx":515
+  /* "ffvideo.pyx":522
  *         self.skipped_pts = 0
  * 
  *         stream_pts = av_rescale_q(pts, AV_TIME_BASE_Q, self.stream.time_base) + \             # <<<<<<<<<<<<<<
@@ -5232,196 +5345,236 @@ static PyObject *__pyx_pf_7ffvideo_11VideoStream_22get_frame_at_pts(struct __pyx
  */
   __pyx_v_stream_pts = (av_rescale_q(__pyx_v_pts, AV_TIME_BASE_Q, __pyx_v_self->stream->time_base) + __pyx_v_self->stream->start_time);
 
-  /* "ffvideo.pyx":521
+  /* "ffvideo.pyx":528
  *         # but (IMPORTANT) it is the only flag that returns < 0 if seeked outside of
  *         # frame range of videos
+ *         print "before seek", pts             # <<<<<<<<<<<<<<
+ *         ret = av_seek_frame(self.format_ctx, self.streamno, stream_pts, AVSEEK_FLAG_ANY)
+ *         print "after seek", ret
+ */
+  __pyx_t_1 = __Pyx_PyInt_From_signed__PY_LONG_LONG(__pyx_v_pts); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 528; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 528; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_INCREF(__pyx_kp_s_before_seek);
+  PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_kp_s_before_seek);
+  __Pyx_GIVEREF(__pyx_kp_s_before_seek);
+  PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_t_1);
+  __Pyx_GIVEREF(__pyx_t_1);
+  __pyx_t_1 = 0;
+  if (__Pyx_Print(0, __pyx_t_2, 1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 528; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+  /* "ffvideo.pyx":529
+ *         # frame range of videos
+ *         print "before seek", pts
  *         ret = av_seek_frame(self.format_ctx, self.streamno, stream_pts, AVSEEK_FLAG_ANY)             # <<<<<<<<<<<<<<
+ *         print "after seek", ret
  *         if ret < 0:
- *             raise FFVideoError("Unable to seek: %d" % ret)
  */
   __pyx_v_ret = av_seek_frame(__pyx_v_self->format_ctx, __pyx_v_self->streamno, __pyx_v_stream_pts, AVSEEK_FLAG_ANY);
 
-  /* "ffvideo.pyx":522
- *         # frame range of videos
+  /* "ffvideo.pyx":530
+ *         print "before seek", pts
  *         ret = av_seek_frame(self.format_ctx, self.streamno, stream_pts, AVSEEK_FLAG_ANY)
+ *         print "after seek", ret             # <<<<<<<<<<<<<<
+ *         if ret < 0:
+ *             raise FFVideoError("Unable to seek: %d" % ret)
+ */
+  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_ret); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 530; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 530; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_INCREF(__pyx_kp_s_after_seek);
+  PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_kp_s_after_seek);
+  __Pyx_GIVEREF(__pyx_kp_s_after_seek);
+  PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_t_2);
+  __Pyx_GIVEREF(__pyx_t_2);
+  __pyx_t_2 = 0;
+  if (__Pyx_Print(0, __pyx_t_1, 1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 530; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "ffvideo.pyx":531
+ *         ret = av_seek_frame(self.format_ctx, self.streamno, stream_pts, AVSEEK_FLAG_ANY)
+ *         print "after seek", ret
  *         if ret < 0:             # <<<<<<<<<<<<<<
  *             raise FFVideoError("Unable to seek: %d" % ret)
  *         # avcodec_flush_buffers(self.codec_ctx)
  */
-  __pyx_t_1 = ((__pyx_v_ret < 0) != 0);
-  if (__pyx_t_1) {
+  __pyx_t_3 = ((__pyx_v_ret < 0) != 0);
+  if (__pyx_t_3) {
 
-    /* "ffvideo.pyx":523
- *         ret = av_seek_frame(self.format_ctx, self.streamno, stream_pts, AVSEEK_FLAG_ANY)
+    /* "ffvideo.pyx":532
+ *         print "after seek", ret
  *         if ret < 0:
  *             raise FFVideoError("Unable to seek: %d" % ret)             # <<<<<<<<<<<<<<
  *         # avcodec_flush_buffers(self.codec_ctx)
  * 
  */
-    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_FFVideoError); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 523; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_ret); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 523; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_FFVideoError); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 532; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_ret); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 532; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = __Pyx_PyString_Format(__pyx_kp_s_Unable_to_seek_d, __pyx_t_4); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 523; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_5 = __Pyx_PyString_Format(__pyx_kp_s_Unable_to_seek_d, __pyx_t_4); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 532; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_t_4 = NULL;
-    if (CYTHON_COMPILING_IN_CPYTHON && unlikely(PyMethod_Check(__pyx_t_3))) {
-      __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_3);
+    if (CYTHON_COMPILING_IN_CPYTHON && unlikely(PyMethod_Check(__pyx_t_2))) {
+      __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
       if (likely(__pyx_t_4)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
         __Pyx_INCREF(__pyx_t_4);
         __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_3, function);
+        __Pyx_DECREF_SET(__pyx_t_2, function);
       }
     }
     if (!__pyx_t_4) {
-      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_5); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 523; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_5); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 532; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      __Pyx_GOTREF(__pyx_t_2);
+      __Pyx_GOTREF(__pyx_t_1);
     } else {
-      __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 523; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 532; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_6);
       PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_4); __Pyx_GIVEREF(__pyx_t_4); __pyx_t_4 = NULL;
       PyTuple_SET_ITEM(__pyx_t_6, 0+1, __pyx_t_5);
       __Pyx_GIVEREF(__pyx_t_5);
       __pyx_t_5 = 0;
-      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 523; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-      __Pyx_GOTREF(__pyx_t_2);
+      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_6, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 532; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     }
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 523; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_Raise(__pyx_t_1, 0, 0, 0);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 532; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
 
-  /* "ffvideo.pyx":527
+  /* "ffvideo.pyx":536
  * 
  *         # we have to seek again for frame accuracy and ensuring that a keyframe is decoded as well
  *         ret = av_seek_frame(self.format_ctx, self.streamno, stream_pts, self.seek_mode)             # <<<<<<<<<<<<<<
- *         avcodec_flush_buffers(self.codec_ctx)
- * 
- */
-  __pyx_v_ret = av_seek_frame(__pyx_v_self->format_ctx, __pyx_v_self->streamno, __pyx_v_stream_pts, __pyx_v_self->seek_mode);
-
-  /* "ffvideo.pyx":528
- *         # we have to seek again for frame accuracy and ensuring that a keyframe is decoded as well
- *         ret = av_seek_frame(self.format_ctx, self.streamno, stream_pts, self.seek_mode)
- *         avcodec_flush_buffers(self.codec_ctx)             # <<<<<<<<<<<<<<
  * 
  *         # if we hurry it we can get bad frames later in the GOP
  */
-  avcodec_flush_buffers(__pyx_v_self->codec_ctx);
+  __pyx_v_ret = av_seek_frame(__pyx_v_self->format_ctx, __pyx_v_self->streamno, __pyx_v_stream_pts, __pyx_v_self->seek_mode);
 
-  /* "ffvideo.pyx":538
+  /* "ffvideo.pyx":546
  * 
  *         # self.codec_ctx.hurry_up = 1
  *         hurried_frames = 0             # <<<<<<<<<<<<<<
  *         # self.__decode_next_frame()
- *         while self.__decode_next_frame() < pts:
+ *         # while self.__decode_next_frame() < pts:
  */
   __pyx_v_hurried_frames = 0;
 
-  /* "ffvideo.pyx":540
- *         hurried_frames = 0
+  /* "ffvideo.pyx":549
  *         # self.__decode_next_frame()
- *         while self.__decode_next_frame() < pts:             # <<<<<<<<<<<<<<
+ *         # while self.__decode_next_frame() < pts:
+ *         while self.print_decode_next_frame() < pts:             # <<<<<<<<<<<<<<
  *             if self.frame.pts < 0:
  *                 self.get_frame_at_pts(pts - av_rescale(1,
  */
   while (1) {
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_decode_next_frame); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 540; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_print_decode_next_frame); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 549; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_2);
     __pyx_t_6 = NULL;
-    if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_3))) {
-      __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_3);
+    if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_2))) {
+      __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_2);
       if (likely(__pyx_t_6)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
         __Pyx_INCREF(__pyx_t_6);
         __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_3, function);
+        __Pyx_DECREF_SET(__pyx_t_2, function);
       }
     }
     if (__pyx_t_6) {
-      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_6); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 540; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_6); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 549; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     } else {
-      __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 540; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 549; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
-    __Pyx_GOTREF(__pyx_t_2);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = __Pyx_PyInt_From_signed__PY_LONG_LONG(__pyx_v_pts); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 540; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_6 = PyObject_RichCompare(__pyx_t_2, __pyx_t_3, Py_LT); __Pyx_XGOTREF(__pyx_t_6); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 540; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_t_6); if (unlikely(__pyx_t_1 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 540; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_2 = __Pyx_PyInt_From_signed__PY_LONG_LONG(__pyx_v_pts); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 549; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_6 = PyObject_RichCompare(__pyx_t_1, __pyx_t_2, Py_LT); __Pyx_XGOTREF(__pyx_t_6); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 549; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_6); if (unlikely(__pyx_t_3 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 549; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    if (!__pyx_t_1) break;
+    if (!__pyx_t_3) break;
 
-    /* "ffvideo.pyx":541
- *         # self.__decode_next_frame()
- *         while self.__decode_next_frame() < pts:
+    /* "ffvideo.pyx":550
+ *         # while self.__decode_next_frame() < pts:
+ *         while self.print_decode_next_frame() < pts:
  *             if self.frame.pts < 0:             # <<<<<<<<<<<<<<
  *                 self.get_frame_at_pts(pts - av_rescale(1,
  *                                       self.stream.r_frame_rate.den*AV_TIME_BASE,
  */
-    __pyx_t_1 = ((__pyx_v_self->frame->pts < 0) != 0);
-    if (__pyx_t_1) {
+    __pyx_t_3 = ((__pyx_v_self->frame->pts < 0) != 0);
+    if (__pyx_t_3) {
 
-      /* "ffvideo.pyx":542
- *         while self.__decode_next_frame() < pts:
+      /* "ffvideo.pyx":551
+ *         while self.print_decode_next_frame() < pts:
  *             if self.frame.pts < 0:
  *                 self.get_frame_at_pts(pts - av_rescale(1,             # <<<<<<<<<<<<<<
  *                                       self.stream.r_frame_rate.den*AV_TIME_BASE,
  *                                       self.stream.r_frame_rate.num))
  */
-      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_get_frame_at_pts); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 542; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-      __Pyx_GOTREF(__pyx_t_3);
+      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_get_frame_at_pts); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 551; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __Pyx_GOTREF(__pyx_t_2);
 
-      /* "ffvideo.pyx":544
+      /* "ffvideo.pyx":553
  *                 self.get_frame_at_pts(pts - av_rescale(1,
  *                                       self.stream.r_frame_rate.den*AV_TIME_BASE,
  *                                       self.stream.r_frame_rate.num))             # <<<<<<<<<<<<<<
  * 
- *         # self.codec_ctx.hurry_up = 0
+ * 
  */
-      __pyx_t_2 = __Pyx_PyInt_From_signed__PY_LONG_LONG((__pyx_v_pts - av_rescale(1, (__pyx_v_self->stream->r_frame_rate.den * AV_TIME_BASE), __pyx_v_self->stream->r_frame_rate.num))); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 542; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-      __Pyx_GOTREF(__pyx_t_2);
+      __pyx_t_1 = __Pyx_PyInt_From_signed__PY_LONG_LONG((__pyx_v_pts - av_rescale(1, (__pyx_v_self->stream->r_frame_rate.den * AV_TIME_BASE), __pyx_v_self->stream->r_frame_rate.num))); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 551; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __Pyx_GOTREF(__pyx_t_1);
       __pyx_t_5 = NULL;
-      if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_3))) {
-        __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_3);
+      if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_2))) {
+        __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_2);
         if (likely(__pyx_t_5)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
           __Pyx_INCREF(__pyx_t_5);
           __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_3, function);
+          __Pyx_DECREF_SET(__pyx_t_2, function);
         }
       }
       if (!__pyx_t_5) {
-        __pyx_t_6 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_2); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 542; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+        __pyx_t_6 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_1); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 551; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
         __Pyx_GOTREF(__pyx_t_6);
       } else {
-        __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 542; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 551; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_4);
         PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_5); __Pyx_GIVEREF(__pyx_t_5); __pyx_t_5 = NULL;
-        PyTuple_SET_ITEM(__pyx_t_4, 0+1, __pyx_t_2);
-        __Pyx_GIVEREF(__pyx_t_2);
-        __pyx_t_2 = 0;
-        __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, NULL); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 542; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        PyTuple_SET_ITEM(__pyx_t_4, 0+1, __pyx_t_1);
+        __Pyx_GIVEREF(__pyx_t_1);
+        __pyx_t_1 = 0;
+        __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_4, NULL); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 551; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_6);
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       }
-      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       goto __pyx_L6;
     }
     __pyx_L6:;
   }
 
-  /* "ffvideo.pyx":551
+  /* "ffvideo.pyx":556
+ * 
+ * 
+ *         avcodec_flush_buffers(self.codec_ctx)             # <<<<<<<<<<<<<<
+ * 
+ *         # self.codec_ctx.hurry_up = 0
+ */
+  avcodec_flush_buffers(__pyx_v_self->codec_ctx);
+
+  /* "ffvideo.pyx":563
  *         # self.codec_ctx.skip_frame = AVDISCARD_DEFAULT
  * 
  *         return self.current()             # <<<<<<<<<<<<<<
@@ -5429,31 +5582,31 @@ static PyObject *__pyx_pf_7ffvideo_11VideoStream_22get_frame_at_pts(struct __pyx
  *     def __iter__(self):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_current); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 551; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_current); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 563; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_4 = NULL;
-  if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_3))) {
-    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_3);
+  if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
     if (likely(__pyx_t_4)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
       __Pyx_INCREF(__pyx_t_4);
       __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_3, function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
     }
   }
   if (__pyx_t_4) {
-    __pyx_t_6 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 551; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_6 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 563; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   } else {
-    __pyx_t_6 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 551; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_6 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 563; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __Pyx_GOTREF(__pyx_t_6);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_r = __pyx_t_6;
   __pyx_t_6 = 0;
   goto __pyx_L0;
 
-  /* "ffvideo.pyx":508
+  /* "ffvideo.pyx":515
  * 
  * 
  *     def get_frame_at_pts(self, int64_t pts):             # <<<<<<<<<<<<<<
@@ -5463,8 +5616,8 @@ static PyObject *__pyx_pf_7ffvideo_11VideoStream_22get_frame_at_pts(struct __pyx
 
   /* function exit code */
   __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_5);
   __Pyx_XDECREF(__pyx_t_6);
@@ -5476,7 +5629,7 @@ static PyObject *__pyx_pf_7ffvideo_11VideoStream_22get_frame_at_pts(struct __pyx
   return __pyx_r;
 }
 
-/* "ffvideo.pyx":553
+/* "ffvideo.pyx":565
  *         return self.current()
  * 
  *     def __iter__(self):             # <<<<<<<<<<<<<<
@@ -5485,19 +5638,19 @@ static PyObject *__pyx_pf_7ffvideo_11VideoStream_22get_frame_at_pts(struct __pyx
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7ffvideo_11VideoStream_25__iter__(PyObject *__pyx_v_self); /*proto*/
-static PyObject *__pyx_pw_7ffvideo_11VideoStream_25__iter__(PyObject *__pyx_v_self) {
+static PyObject *__pyx_pw_7ffvideo_11VideoStream_27__iter__(PyObject *__pyx_v_self); /*proto*/
+static PyObject *__pyx_pw_7ffvideo_11VideoStream_27__iter__(PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__iter__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_7ffvideo_11VideoStream_24__iter__(((struct __pyx_obj_7ffvideo_VideoStream *)__pyx_v_self));
+  __pyx_r = __pyx_pf_7ffvideo_11VideoStream_26__iter__(((struct __pyx_obj_7ffvideo_VideoStream *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7ffvideo_11VideoStream_24__iter__(struct __pyx_obj_7ffvideo_VideoStream *__pyx_v_self) {
+static PyObject *__pyx_pf_7ffvideo_11VideoStream_26__iter__(struct __pyx_obj_7ffvideo_VideoStream *__pyx_v_self) {
   PyObject *__pyx_v_ret = NULL;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -5512,7 +5665,7 @@ static PyObject *__pyx_pf_7ffvideo_11VideoStream_24__iter__(struct __pyx_obj_7ff
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__iter__", 0);
 
-  /* "ffvideo.pyx":555
+  /* "ffvideo.pyx":567
  *     def __iter__(self):
  *         # rewind
  *         self.flushing_cache = 0             # <<<<<<<<<<<<<<
@@ -5521,7 +5674,7 @@ static PyObject *__pyx_pf_7ffvideo_11VideoStream_24__iter__(struct __pyx_obj_7ff
  */
   __pyx_v_self->flushing_cache = 0;
 
-  /* "ffvideo.pyx":556
+  /* "ffvideo.pyx":568
  *         # rewind
  *         self.flushing_cache = 0
  *         self.skipped_pts = 0             # <<<<<<<<<<<<<<
@@ -5530,40 +5683,40 @@ static PyObject *__pyx_pf_7ffvideo_11VideoStream_24__iter__(struct __pyx_obj_7ff
  */
   __pyx_v_self->skipped_pts = 0;
 
-  /* "ffvideo.pyx":561
+  /* "ffvideo.pyx":573
  *         # av_free(self.frame)
  * 
  *         ret = av_seek_frame(self.format_ctx, self.streamno,             # <<<<<<<<<<<<<<
  *                             self.stream.start_time, self.seek_mode)
  *         if ret < 0:
  */
-  __pyx_t_1 = __Pyx_PyInt_From_int(av_seek_frame(__pyx_v_self->format_ctx, __pyx_v_self->streamno, __pyx_v_self->stream->start_time, __pyx_v_self->seek_mode)); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 561; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyInt_From_int(av_seek_frame(__pyx_v_self->format_ctx, __pyx_v_self->streamno, __pyx_v_self->stream->start_time, __pyx_v_self->seek_mode)); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 573; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_ret = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "ffvideo.pyx":563
+  /* "ffvideo.pyx":575
  *         ret = av_seek_frame(self.format_ctx, self.streamno,
  *                             self.stream.start_time, self.seek_mode)
  *         if ret < 0:             # <<<<<<<<<<<<<<
  *             raise FFVideoError("Unable to rewind: %d" % ret)
  *         avcodec_flush_buffers(self.codec_ctx)
  */
-  __pyx_t_1 = PyObject_RichCompare(__pyx_v_ret, __pyx_int_0, Py_LT); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 563; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 563; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyObject_RichCompare(__pyx_v_ret, __pyx_int_0, Py_LT); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 575; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 575; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "ffvideo.pyx":564
+    /* "ffvideo.pyx":576
  *                             self.stream.start_time, self.seek_mode)
  *         if ret < 0:
  *             raise FFVideoError("Unable to rewind: %d" % ret)             # <<<<<<<<<<<<<<
  *         avcodec_flush_buffers(self.codec_ctx)
  *         return self
  */
-    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_FFVideoError); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 564; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_FFVideoError); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 576; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __Pyx_PyString_Format(__pyx_kp_s_Unable_to_rewind_d, __pyx_v_ret); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 564; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_4 = __Pyx_PyString_Format(__pyx_kp_s_Unable_to_rewind_d, __pyx_v_ret); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 576; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_4);
     __pyx_t_5 = NULL;
     if (CYTHON_COMPILING_IN_CPYTHON && unlikely(PyMethod_Check(__pyx_t_3))) {
@@ -5576,27 +5729,27 @@ static PyObject *__pyx_pf_7ffvideo_11VideoStream_24__iter__(struct __pyx_obj_7ff
       }
     }
     if (!__pyx_t_5) {
-      __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 564; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 576; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_GOTREF(__pyx_t_1);
     } else {
-      __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 564; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 576; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_6);
       PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_5); __Pyx_GIVEREF(__pyx_t_5); __pyx_t_5 = NULL;
       PyTuple_SET_ITEM(__pyx_t_6, 0+1, __pyx_t_4);
       __Pyx_GIVEREF(__pyx_t_4);
       __pyx_t_4 = 0;
-      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 564; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 576; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     }
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_Raise(__pyx_t_1, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 564; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 576; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
 
-  /* "ffvideo.pyx":565
+  /* "ffvideo.pyx":577
  *         if ret < 0:
  *             raise FFVideoError("Unable to rewind: %d" % ret)
  *         avcodec_flush_buffers(self.codec_ctx)             # <<<<<<<<<<<<<<
@@ -5605,7 +5758,7 @@ static PyObject *__pyx_pf_7ffvideo_11VideoStream_24__iter__(struct __pyx_obj_7ff
  */
   avcodec_flush_buffers(__pyx_v_self->codec_ctx);
 
-  /* "ffvideo.pyx":566
+  /* "ffvideo.pyx":578
  *             raise FFVideoError("Unable to rewind: %d" % ret)
  *         avcodec_flush_buffers(self.codec_ctx)
  *         return self             # <<<<<<<<<<<<<<
@@ -5617,7 +5770,7 @@ static PyObject *__pyx_pf_7ffvideo_11VideoStream_24__iter__(struct __pyx_obj_7ff
   __pyx_r = ((PyObject *)__pyx_v_self);
   goto __pyx_L0;
 
-  /* "ffvideo.pyx":553
+  /* "ffvideo.pyx":565
  *         return self.current()
  * 
  *     def __iter__(self):             # <<<<<<<<<<<<<<
@@ -5641,7 +5794,7 @@ static PyObject *__pyx_pf_7ffvideo_11VideoStream_24__iter__(struct __pyx_obj_7ff
   return __pyx_r;
 }
 
-/* "ffvideo.pyx":568
+/* "ffvideo.pyx":580
  *         return self
  * 
  *     def __next__(self):             # <<<<<<<<<<<<<<
@@ -5650,19 +5803,19 @@ static PyObject *__pyx_pf_7ffvideo_11VideoStream_24__iter__(struct __pyx_obj_7ff
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7ffvideo_11VideoStream_27__next__(PyObject *__pyx_v_self); /*proto*/
-static PyObject *__pyx_pw_7ffvideo_11VideoStream_27__next__(PyObject *__pyx_v_self) {
+static PyObject *__pyx_pw_7ffvideo_11VideoStream_29__next__(PyObject *__pyx_v_self); /*proto*/
+static PyObject *__pyx_pw_7ffvideo_11VideoStream_29__next__(PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__next__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_7ffvideo_11VideoStream_26__next__(((struct __pyx_obj_7ffvideo_VideoStream *)__pyx_v_self));
+  __pyx_r = __pyx_pf_7ffvideo_11VideoStream_28__next__(((struct __pyx_obj_7ffvideo_VideoStream *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7ffvideo_11VideoStream_26__next__(struct __pyx_obj_7ffvideo_VideoStream *__pyx_v_self) {
+static PyObject *__pyx_pf_7ffvideo_11VideoStream_28__next__(struct __pyx_obj_7ffvideo_VideoStream *__pyx_v_self) {
   CYTHON_UNUSED PyObject *__pyx_v_ret = NULL;
   PyObject *__pyx_v_e = NULL;
   PyObject *__pyx_r = NULL;
@@ -5681,7 +5834,7 @@ static PyObject *__pyx_pf_7ffvideo_11VideoStream_26__next__(struct __pyx_obj_7ff
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__next__", 0);
 
-  /* "ffvideo.pyx":569
+  /* "ffvideo.pyx":581
  * 
  *     def __next__(self):
  *         try:             # <<<<<<<<<<<<<<
@@ -5695,14 +5848,14 @@ static PyObject *__pyx_pf_7ffvideo_11VideoStream_26__next__(struct __pyx_obj_7ff
     __Pyx_XGOTREF(__pyx_t_3);
     /*try:*/ {
 
-      /* "ffvideo.pyx":570
+      /* "ffvideo.pyx":582
  *     def __next__(self):
  *         try:
  *             ret = self.__decode_next_frame()             # <<<<<<<<<<<<<<
  *         except (NoMoreData), e:
  *             raise StopIteration(e)
  */
-      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_decode_next_frame); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 570; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_decode_next_frame); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 582; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
       __Pyx_GOTREF(__pyx_t_5);
       __pyx_t_6 = NULL;
       if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_5))) {
@@ -5715,10 +5868,10 @@ static PyObject *__pyx_pf_7ffvideo_11VideoStream_26__next__(struct __pyx_obj_7ff
         }
       }
       if (__pyx_t_6) {
-        __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 570; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 582; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       } else {
-        __pyx_t_4 = __Pyx_PyObject_CallNoArg(__pyx_t_5); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 570; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        __pyx_t_4 = __Pyx_PyObject_CallNoArg(__pyx_t_5); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 582; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
       }
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -5734,44 +5887,44 @@ static PyObject *__pyx_pf_7ffvideo_11VideoStream_26__next__(struct __pyx_obj_7ff
     __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-    /* "ffvideo.pyx":571
+    /* "ffvideo.pyx":583
  *         try:
  *             ret = self.__decode_next_frame()
  *         except (NoMoreData), e:             # <<<<<<<<<<<<<<
  *             raise StopIteration(e)
  * 
  */
-    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_NoMoreData); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 571; __pyx_clineno = __LINE__; goto __pyx_L5_except_error;}
+    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_NoMoreData); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 583; __pyx_clineno = __LINE__; goto __pyx_L5_except_error;}
     __Pyx_GOTREF(__pyx_t_4);
     __pyx_t_7 = PyErr_ExceptionMatches(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     if (__pyx_t_7) {
       __Pyx_AddTraceback("ffvideo.VideoStream.__next__", __pyx_clineno, __pyx_lineno, __pyx_filename);
-      if (__Pyx_GetException(&__pyx_t_4, &__pyx_t_5, &__pyx_t_6) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 571; __pyx_clineno = __LINE__; goto __pyx_L5_except_error;}
+      if (__Pyx_GetException(&__pyx_t_4, &__pyx_t_5, &__pyx_t_6) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 583; __pyx_clineno = __LINE__; goto __pyx_L5_except_error;}
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_INCREF(__pyx_t_5);
       __pyx_v_e = __pyx_t_5;
 
-      /* "ffvideo.pyx":572
+      /* "ffvideo.pyx":584
  *             ret = self.__decode_next_frame()
  *         except (NoMoreData), e:
  *             raise StopIteration(e)             # <<<<<<<<<<<<<<
  * 
  *         return self.current()
  */
-      __pyx_t_8 = PyTuple_New(1); if (unlikely(!__pyx_t_8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 572; __pyx_clineno = __LINE__; goto __pyx_L5_except_error;}
+      __pyx_t_8 = PyTuple_New(1); if (unlikely(!__pyx_t_8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 584; __pyx_clineno = __LINE__; goto __pyx_L5_except_error;}
       __Pyx_GOTREF(__pyx_t_8);
       __Pyx_INCREF(__pyx_v_e);
       PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_v_e);
       __Pyx_GIVEREF(__pyx_v_e);
-      __pyx_t_9 = __Pyx_PyObject_Call(__pyx_builtin_StopIteration, __pyx_t_8, NULL); if (unlikely(!__pyx_t_9)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 572; __pyx_clineno = __LINE__; goto __pyx_L5_except_error;}
+      __pyx_t_9 = __Pyx_PyObject_Call(__pyx_builtin_StopIteration, __pyx_t_8, NULL); if (unlikely(!__pyx_t_9)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 584; __pyx_clineno = __LINE__; goto __pyx_L5_except_error;}
       __Pyx_GOTREF(__pyx_t_9);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
       __Pyx_Raise(__pyx_t_9, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-      {__pyx_filename = __pyx_f[0]; __pyx_lineno = 572; __pyx_clineno = __LINE__; goto __pyx_L5_except_error;}
+      {__pyx_filename = __pyx_f[0]; __pyx_lineno = 584; __pyx_clineno = __LINE__; goto __pyx_L5_except_error;}
     }
     goto __pyx_L5_except_error;
     __pyx_L5_except_error:;
@@ -5783,7 +5936,7 @@ static PyObject *__pyx_pf_7ffvideo_11VideoStream_26__next__(struct __pyx_obj_7ff
     __pyx_L10_try_end:;
   }
 
-  /* "ffvideo.pyx":574
+  /* "ffvideo.pyx":586
  *             raise StopIteration(e)
  * 
  *         return self.current()             # <<<<<<<<<<<<<<
@@ -5791,7 +5944,7 @@ static PyObject *__pyx_pf_7ffvideo_11VideoStream_26__next__(struct __pyx_obj_7ff
  *     def __getitem__(self, frameno):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_current); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 574; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_current); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 586; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_5);
   __pyx_t_4 = NULL;
   if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_5))) {
@@ -5804,10 +5957,10 @@ static PyObject *__pyx_pf_7ffvideo_11VideoStream_26__next__(struct __pyx_obj_7ff
     }
   }
   if (__pyx_t_4) {
-    __pyx_t_6 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_4); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 574; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_6 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_4); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 586; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   } else {
-    __pyx_t_6 = __Pyx_PyObject_CallNoArg(__pyx_t_5); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 574; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_6 = __Pyx_PyObject_CallNoArg(__pyx_t_5); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 586; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -5815,7 +5968,7 @@ static PyObject *__pyx_pf_7ffvideo_11VideoStream_26__next__(struct __pyx_obj_7ff
   __pyx_t_6 = 0;
   goto __pyx_L0;
 
-  /* "ffvideo.pyx":568
+  /* "ffvideo.pyx":580
  *         return self
  * 
  *     def __next__(self):             # <<<<<<<<<<<<<<
@@ -5840,7 +5993,7 @@ static PyObject *__pyx_pf_7ffvideo_11VideoStream_26__next__(struct __pyx_obj_7ff
   return __pyx_r;
 }
 
-/* "ffvideo.pyx":576
+/* "ffvideo.pyx":588
  *         return self.current()
  * 
  *     def __getitem__(self, frameno):             # <<<<<<<<<<<<<<
@@ -5849,19 +6002,19 @@ static PyObject *__pyx_pf_7ffvideo_11VideoStream_26__next__(struct __pyx_obj_7ff
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7ffvideo_11VideoStream_29__getitem__(PyObject *__pyx_v_self, PyObject *__pyx_v_frameno); /*proto*/
-static PyObject *__pyx_pw_7ffvideo_11VideoStream_29__getitem__(PyObject *__pyx_v_self, PyObject *__pyx_v_frameno) {
+static PyObject *__pyx_pw_7ffvideo_11VideoStream_31__getitem__(PyObject *__pyx_v_self, PyObject *__pyx_v_frameno); /*proto*/
+static PyObject *__pyx_pw_7ffvideo_11VideoStream_31__getitem__(PyObject *__pyx_v_self, PyObject *__pyx_v_frameno) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__getitem__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_7ffvideo_11VideoStream_28__getitem__(((struct __pyx_obj_7ffvideo_VideoStream *)__pyx_v_self), ((PyObject *)__pyx_v_frameno));
+  __pyx_r = __pyx_pf_7ffvideo_11VideoStream_30__getitem__(((struct __pyx_obj_7ffvideo_VideoStream *)__pyx_v_self), ((PyObject *)__pyx_v_frameno));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7ffvideo_11VideoStream_28__getitem__(struct __pyx_obj_7ffvideo_VideoStream *__pyx_v_self, PyObject *__pyx_v_frameno) {
+static PyObject *__pyx_pf_7ffvideo_11VideoStream_30__getitem__(struct __pyx_obj_7ffvideo_VideoStream *__pyx_v_self, PyObject *__pyx_v_frameno) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -5873,7 +6026,7 @@ static PyObject *__pyx_pf_7ffvideo_11VideoStream_28__getitem__(struct __pyx_obj_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__getitem__", 0);
 
-  /* "ffvideo.pyx":577
+  /* "ffvideo.pyx":589
  * 
  *     def __getitem__(self, frameno):
  *         return self.get_frame_no(frameno)             # <<<<<<<<<<<<<<
@@ -5881,7 +6034,7 @@ static PyObject *__pyx_pf_7ffvideo_11VideoStream_28__getitem__(struct __pyx_obj_
  *     def __repr__(self):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_get_frame_no); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 577; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_get_frame_no); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 589; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_2))) {
@@ -5894,16 +6047,16 @@ static PyObject *__pyx_pf_7ffvideo_11VideoStream_28__getitem__(struct __pyx_obj_
     }
   }
   if (!__pyx_t_3) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_frameno); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 577; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_frameno); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 589; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
   } else {
-    __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 577; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 589; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_4);
     PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_3); __Pyx_GIVEREF(__pyx_t_3); __pyx_t_3 = NULL;
     __Pyx_INCREF(__pyx_v_frameno);
     PyTuple_SET_ITEM(__pyx_t_4, 0+1, __pyx_v_frameno);
     __Pyx_GIVEREF(__pyx_v_frameno);
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 577; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 589; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   }
@@ -5912,7 +6065,7 @@ static PyObject *__pyx_pf_7ffvideo_11VideoStream_28__getitem__(struct __pyx_obj_
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "ffvideo.pyx":576
+  /* "ffvideo.pyx":588
  *         return self.current()
  * 
  *     def __getitem__(self, frameno):             # <<<<<<<<<<<<<<
@@ -5934,7 +6087,7 @@ static PyObject *__pyx_pf_7ffvideo_11VideoStream_28__getitem__(struct __pyx_obj_
   return __pyx_r;
 }
 
-/* "ffvideo.pyx":579
+/* "ffvideo.pyx":591
  *         return self.get_frame_no(frameno)
  * 
  *     def __repr__(self):             # <<<<<<<<<<<<<<
@@ -5943,19 +6096,19 @@ static PyObject *__pyx_pf_7ffvideo_11VideoStream_28__getitem__(struct __pyx_obj_
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7ffvideo_11VideoStream_31__repr__(PyObject *__pyx_v_self); /*proto*/
-static PyObject *__pyx_pw_7ffvideo_11VideoStream_31__repr__(PyObject *__pyx_v_self) {
+static PyObject *__pyx_pw_7ffvideo_11VideoStream_33__repr__(PyObject *__pyx_v_self); /*proto*/
+static PyObject *__pyx_pw_7ffvideo_11VideoStream_33__repr__(PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__repr__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_7ffvideo_11VideoStream_30__repr__(((struct __pyx_obj_7ffvideo_VideoStream *)__pyx_v_self));
+  __pyx_r = __pyx_pf_7ffvideo_11VideoStream_32__repr__(((struct __pyx_obj_7ffvideo_VideoStream *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7ffvideo_11VideoStream_30__repr__(struct __pyx_obj_7ffvideo_VideoStream *__pyx_v_self) {
+static PyObject *__pyx_pf_7ffvideo_11VideoStream_32__repr__(struct __pyx_obj_7ffvideo_VideoStream *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -5965,7 +6118,7 @@ static PyObject *__pyx_pf_7ffvideo_11VideoStream_30__repr__(struct __pyx_obj_7ff
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__repr__", 0);
 
-  /* "ffvideo.pyx":580
+  /* "ffvideo.pyx":592
  * 
  *     def __repr__(self):
  *         return "<VideoStream '%s':%.4f>" % (self.filename, <double>self.frame.pts/<double>AV_TIME_BASE)             # <<<<<<<<<<<<<<
@@ -5981,11 +6134,11 @@ static PyObject *__pyx_pf_7ffvideo_11VideoStream_30__repr__(struct __pyx_obj_7ff
     #ifdef WITH_THREAD
     PyGILState_Release(__pyx_gilstate_save);
     #endif
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 580; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 592; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
-  __pyx_t_1 = PyFloat_FromDouble((((double)__pyx_v_self->frame->pts) / ((double)AV_TIME_BASE))); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 580; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyFloat_FromDouble((((double)__pyx_v_self->frame->pts) / ((double)AV_TIME_BASE))); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 592; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 580; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 592; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_v_self->filename);
   PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_self->filename);
@@ -5993,14 +6146,14 @@ static PyObject *__pyx_pf_7ffvideo_11VideoStream_30__repr__(struct __pyx_obj_7ff
   PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyString_Format(__pyx_kp_s_VideoStream_s_4f, __pyx_t_2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 580; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyString_Format(__pyx_kp_s_VideoStream_s_4f, __pyx_t_2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 592; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "ffvideo.pyx":579
+  /* "ffvideo.pyx":591
  *         return self.get_frame_no(frameno)
  * 
  *     def __repr__(self):             # <<<<<<<<<<<<<<
@@ -6798,7 +6951,7 @@ static int __pyx_pf_7ffvideo_11VideoStream_17ffmpeg_frame_mode_2__set__(struct _
   return __pyx_r;
 }
 
-/* "ffvideo.pyx":597
+/* "ffvideo.pyx":609
  * 
  * 
  *     def __init__(self, array, size, mode, timestamp=0, frameno=0):             # <<<<<<<<<<<<<<
@@ -6845,12 +6998,12 @@ static int __pyx_pw_7ffvideo_10VideoFrame_1__init__(PyObject *__pyx_v_self, PyOb
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_size)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__init__", 0, 3, 5, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 597; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("__init__", 0, 3, 5, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 609; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
         case  2:
         if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_mode)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__init__", 0, 3, 5, 2); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 597; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("__init__", 0, 3, 5, 2); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 609; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
         case  3:
         if (kw_args > 0) {
@@ -6864,7 +7017,7 @@ static int __pyx_pw_7ffvideo_10VideoFrame_1__init__(PyObject *__pyx_v_self, PyOb
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 597; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 609; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -6885,7 +7038,7 @@ static int __pyx_pw_7ffvideo_10VideoFrame_1__init__(PyObject *__pyx_v_self, PyOb
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__init__", 0, 3, 5, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 597; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  __Pyx_RaiseArgtupleInvalid("__init__", 0, 3, 5, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 609; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
   __Pyx_AddTraceback("ffvideo.VideoFrame.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -6913,14 +7066,14 @@ static int __pyx_pf_7ffvideo_10VideoFrame___init__(struct __pyx_obj_7ffvideo_Vid
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__init__", 0);
 
-  /* "ffvideo.pyx":599
+  /* "ffvideo.pyx":611
  *     def __init__(self, array, size, mode, timestamp=0, frameno=0):
  *         # self.data = data
  *         self.array = array             # <<<<<<<<<<<<<<
  *         self.width, self.height = size
  *         self.size = size
  */
-  if (!(likely(((__pyx_v_array) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_array, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 599; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (!(likely(((__pyx_v_array) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_array, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 611; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_t_1 = __pyx_v_array;
   __Pyx_INCREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
@@ -6929,7 +7082,7 @@ static int __pyx_pf_7ffvideo_10VideoFrame___init__(struct __pyx_obj_7ffvideo_Vid
   __pyx_v_self->array = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "ffvideo.pyx":600
+  /* "ffvideo.pyx":612
  *         # self.data = data
  *         self.array = array
  *         self.width, self.height = size             # <<<<<<<<<<<<<<
@@ -6946,7 +7099,7 @@ static int __pyx_pf_7ffvideo_10VideoFrame___init__(struct __pyx_obj_7ffvideo_Vid
     if (unlikely(size != 2)) {
       if (size > 2) __Pyx_RaiseTooManyValuesError(2);
       else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-      {__pyx_filename = __pyx_f[0]; __pyx_lineno = 600; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      {__pyx_filename = __pyx_f[0]; __pyx_lineno = 612; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
     #if CYTHON_COMPILING_IN_CPYTHON
     if (likely(PyTuple_CheckExact(sequence))) {
@@ -6959,21 +7112,21 @@ static int __pyx_pf_7ffvideo_10VideoFrame___init__(struct __pyx_obj_7ffvideo_Vid
     __Pyx_INCREF(__pyx_t_1);
     __Pyx_INCREF(__pyx_t_2);
     #else
-    __pyx_t_1 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 600; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 612; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_2 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 600; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_2 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 612; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_2);
     #endif
   } else {
     Py_ssize_t index = -1;
-    __pyx_t_3 = PyObject_GetIter(__pyx_v_size); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 600; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_3 = PyObject_GetIter(__pyx_v_size); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 612; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_4 = Py_TYPE(__pyx_t_3)->tp_iternext;
     index = 0; __pyx_t_1 = __pyx_t_4(__pyx_t_3); if (unlikely(!__pyx_t_1)) goto __pyx_L3_unpacking_failed;
     __Pyx_GOTREF(__pyx_t_1);
     index = 1; __pyx_t_2 = __pyx_t_4(__pyx_t_3); if (unlikely(!__pyx_t_2)) goto __pyx_L3_unpacking_failed;
     __Pyx_GOTREF(__pyx_t_2);
-    if (__Pyx_IternextUnpackEndCheck(__pyx_t_4(__pyx_t_3), 2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 600; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (__Pyx_IternextUnpackEndCheck(__pyx_t_4(__pyx_t_3), 2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 612; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __pyx_t_4 = NULL;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     goto __pyx_L4_unpacking_done;
@@ -6981,17 +7134,17 @@ static int __pyx_pf_7ffvideo_10VideoFrame___init__(struct __pyx_obj_7ffvideo_Vid
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_t_4 = NULL;
     if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 600; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 612; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __pyx_L4_unpacking_done:;
   }
-  __pyx_t_5 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_5 == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 600; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_5 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_5 == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 612; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_t_2); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 600; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_t_2); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 612; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_self->width = __pyx_t_5;
   __pyx_v_self->height = __pyx_t_6;
 
-  /* "ffvideo.pyx":601
+  /* "ffvideo.pyx":613
  *         self.array = array
  *         self.width, self.height = size
  *         self.size = size             # <<<<<<<<<<<<<<
@@ -7004,7 +7157,7 @@ static int __pyx_pf_7ffvideo_10VideoFrame___init__(struct __pyx_obj_7ffvideo_Vid
   __Pyx_DECREF(__pyx_v_self->size);
   __pyx_v_self->size = __pyx_v_size;
 
-  /* "ffvideo.pyx":602
+  /* "ffvideo.pyx":614
  *         self.width, self.height = size
  *         self.size = size
  *         self.mode = mode             # <<<<<<<<<<<<<<
@@ -7017,27 +7170,27 @@ static int __pyx_pf_7ffvideo_10VideoFrame___init__(struct __pyx_obj_7ffvideo_Vid
   __Pyx_DECREF(__pyx_v_self->mode);
   __pyx_v_self->mode = __pyx_v_mode;
 
-  /* "ffvideo.pyx":603
+  /* "ffvideo.pyx":615
  *         self.size = size
  *         self.mode = mode
  *         self.timestamp = timestamp             # <<<<<<<<<<<<<<
  *         self.frameno = frameno
  * 
  */
-  __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_v_timestamp); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 603; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_v_timestamp); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 615; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_v_self->timestamp = __pyx_t_7;
 
-  /* "ffvideo.pyx":604
+  /* "ffvideo.pyx":616
  *         self.mode = mode
  *         self.timestamp = timestamp
  *         self.frameno = frameno             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_v_frameno); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 604; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_v_frameno); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 616; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_v_self->frameno = __pyx_t_6;
 
-  /* "ffvideo.pyx":597
+  /* "ffvideo.pyx":609
  * 
  * 
  *     def __init__(self, array, size, mode, timestamp=0, frameno=0):             # <<<<<<<<<<<<<<
@@ -7059,7 +7212,7 @@ static int __pyx_pf_7ffvideo_10VideoFrame___init__(struct __pyx_obj_7ffvideo_Vid
   return __pyx_r;
 }
 
-/* "ffvideo.pyx":609
+/* "ffvideo.pyx":621
  * 
  * 
  *     def set_data(self, data):             # <<<<<<<<<<<<<<
@@ -7088,16 +7241,16 @@ static PyObject *__pyx_pf_7ffvideo_10VideoFrame_2set_data(struct __pyx_obj_7ffvi
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("set_data", 0);
 
-  /* "ffvideo.pyx":610
+  /* "ffvideo.pyx":622
  * 
  *     def set_data(self, data):
  *         self.data = data             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  if (__Pyx_PyObject_SetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_data, __pyx_v_data) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 610; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (__Pyx_PyObject_SetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_data, __pyx_v_data) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 622; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-  /* "ffvideo.pyx":609
+  /* "ffvideo.pyx":621
  * 
  * 
  *     def set_data(self, data):             # <<<<<<<<<<<<<<
@@ -7117,7 +7270,7 @@ static PyObject *__pyx_pf_7ffvideo_10VideoFrame_2set_data(struct __pyx_obj_7ffvi
   return __pyx_r;
 }
 
-/* "ffvideo.pyx":614
+/* "ffvideo.pyx":626
  * 
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -7144,7 +7297,7 @@ static void __pyx_pf_7ffvideo_10VideoFrame_4__dealloc__(CYTHON_UNUSED struct __p
   __Pyx_RefNannyFinishContext();
 }
 
-/* "ffvideo.pyx":629
+/* "ffvideo.pyx":641
  *         # return 'lalala'
  * 
  *     def ndarray(self):             # <<<<<<<<<<<<<<
@@ -7177,7 +7330,7 @@ static PyObject *__pyx_pf_7ffvideo_10VideoFrame_6ndarray(struct __pyx_obj_7ffvid
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("ndarray", 0);
 
-  /* "ffvideo.pyx":630
+  /* "ffvideo.pyx":642
  * 
  *     def ndarray(self):
  *         if self.mode not in ('RGB', 'L'):             # <<<<<<<<<<<<<<
@@ -7186,7 +7339,7 @@ static PyObject *__pyx_pf_7ffvideo_10VideoFrame_6ndarray(struct __pyx_obj_7ffvid
  */
   __Pyx_INCREF(__pyx_v_self->mode);
   __pyx_t_1 = __pyx_v_self->mode;
-  __pyx_t_3 = (__Pyx_PyString_Equals(__pyx_t_1, __pyx_n_s_RGB, Py_NE)); if (unlikely(__pyx_t_3 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 630; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = (__Pyx_PyString_Equals(__pyx_t_1, __pyx_n_s_RGB, Py_NE)); if (unlikely(__pyx_t_3 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 642; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   if (__pyx_t_3) {
     goto __pyx_L5_next_and;
   } else {
@@ -7194,31 +7347,31 @@ static PyObject *__pyx_pf_7ffvideo_10VideoFrame_6ndarray(struct __pyx_obj_7ffvid
     goto __pyx_L4_bool_binop_done;
   }
   __pyx_L5_next_and:;
-  __pyx_t_3 = (__Pyx_PyString_Equals(__pyx_t_1, __pyx_n_s_L, Py_NE)); if (unlikely(__pyx_t_3 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 630; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = (__Pyx_PyString_Equals(__pyx_t_1, __pyx_n_s_L, Py_NE)); if (unlikely(__pyx_t_3 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 642; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_t_2 = __pyx_t_3;
   __pyx_L4_bool_binop_done:;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_3 = (__pyx_t_2 != 0);
   if (__pyx_t_3) {
 
-    /* "ffvideo.pyx":631
+    /* "ffvideo.pyx":643
  *     def ndarray(self):
  *         if self.mode not in ('RGB', 'L'):
  *             raise FFVideoError('Cannot represent this color mode into PIL Image')             # <<<<<<<<<<<<<<
  * 
  *         return self.array
  */
-    __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_FFVideoError); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 631; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_FFVideoError); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 643; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_tuple__17, NULL); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 631; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_tuple__17, NULL); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 643; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_Raise(__pyx_t_4, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 631; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 643; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
 
-  /* "ffvideo.pyx":633
+  /* "ffvideo.pyx":645
  *             raise FFVideoError('Cannot represent this color mode into PIL Image')
  * 
  *         return self.array             # <<<<<<<<<<<<<<
@@ -7230,7 +7383,7 @@ static PyObject *__pyx_pf_7ffvideo_10VideoFrame_6ndarray(struct __pyx_obj_7ffvid
   __pyx_r = ((PyObject *)__pyx_v_self->array);
   goto __pyx_L0;
 
-  /* "ffvideo.pyx":629
+  /* "ffvideo.pyx":641
  *         # return 'lalala'
  * 
  *     def ndarray(self):             # <<<<<<<<<<<<<<
@@ -7250,7 +7403,7 @@ static PyObject *__pyx_pf_7ffvideo_10VideoFrame_6ndarray(struct __pyx_obj_7ffvid
   return __pyx_r;
 }
 
-/* "ffvideo.pyx":584
+/* "ffvideo.pyx":596
  * 
  * cdef class VideoFrame:
  *     cdef readonly int width             # <<<<<<<<<<<<<<
@@ -7280,7 +7433,7 @@ static PyObject *__pyx_pf_7ffvideo_10VideoFrame_5width___get__(struct __pyx_obj_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->width); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 584; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->width); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 596; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -7297,7 +7450,7 @@ static PyObject *__pyx_pf_7ffvideo_10VideoFrame_5width___get__(struct __pyx_obj_
   return __pyx_r;
 }
 
-/* "ffvideo.pyx":585
+/* "ffvideo.pyx":597
  * cdef class VideoFrame:
  *     cdef readonly int width
  *     cdef readonly int height             # <<<<<<<<<<<<<<
@@ -7327,7 +7480,7 @@ static PyObject *__pyx_pf_7ffvideo_10VideoFrame_6height___get__(struct __pyx_obj
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->height); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 585; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->height); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 597; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -7344,7 +7497,7 @@ static PyObject *__pyx_pf_7ffvideo_10VideoFrame_6height___get__(struct __pyx_obj
   return __pyx_r;
 }
 
-/* "ffvideo.pyx":586
+/* "ffvideo.pyx":598
  *     cdef readonly int width
  *     cdef readonly int height
  *     cdef readonly object size             # <<<<<<<<<<<<<<
@@ -7381,7 +7534,7 @@ static PyObject *__pyx_pf_7ffvideo_10VideoFrame_4size___get__(struct __pyx_obj_7
   return __pyx_r;
 }
 
-/* "ffvideo.pyx":587
+/* "ffvideo.pyx":599
  *     cdef readonly int height
  *     cdef readonly object size
  *     cdef readonly object mode             # <<<<<<<<<<<<<<
@@ -7418,7 +7571,7 @@ static PyObject *__pyx_pf_7ffvideo_10VideoFrame_4mode___get__(struct __pyx_obj_7
   return __pyx_r;
 }
 
-/* "ffvideo.pyx":589
+/* "ffvideo.pyx":601
  *     cdef readonly object mode
  * 
  *     cdef readonly int frameno             # <<<<<<<<<<<<<<
@@ -7448,7 +7601,7 @@ static PyObject *__pyx_pf_7ffvideo_10VideoFrame_7frameno___get__(struct __pyx_ob
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->frameno); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 589; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->frameno); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 601; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -7465,7 +7618,7 @@ static PyObject *__pyx_pf_7ffvideo_10VideoFrame_7frameno___get__(struct __pyx_ob
   return __pyx_r;
 }
 
-/* "ffvideo.pyx":590
+/* "ffvideo.pyx":602
  * 
  *     cdef readonly int frameno
  *     cdef readonly double timestamp             # <<<<<<<<<<<<<<
@@ -7495,7 +7648,7 @@ static PyObject *__pyx_pf_7ffvideo_10VideoFrame_9timestamp___get__(struct __pyx_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->timestamp); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 590; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->timestamp); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 602; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -9737,8 +9890,9 @@ static PyMethodDef __pyx_methods_7ffvideo_VideoStream[] = {
   {"current", (PyCFunction)__pyx_pw_7ffvideo_11VideoStream_17current, METH_NOARGS, 0},
   {"get_frame_no", (PyCFunction)__pyx_pw_7ffvideo_11VideoStream_19get_frame_no, METH_O, 0},
   {"get_frame_at_sec", (PyCFunction)__pyx_pw_7ffvideo_11VideoStream_21get_frame_at_sec, METH_O, 0},
-  {"get_frame_at_pts", (PyCFunction)__pyx_pw_7ffvideo_11VideoStream_23get_frame_at_pts, METH_O, 0},
-  {"__next__", (PyCFunction)__pyx_pw_7ffvideo_11VideoStream_27__next__, METH_NOARGS|METH_COEXIST, 0},
+  {"print_decode_next_frame", (PyCFunction)__pyx_pw_7ffvideo_11VideoStream_23print_decode_next_frame, METH_NOARGS, 0},
+  {"get_frame_at_pts", (PyCFunction)__pyx_pw_7ffvideo_11VideoStream_25get_frame_at_pts, METH_O, 0},
+  {"__next__", (PyCFunction)__pyx_pw_7ffvideo_11VideoStream_29__next__, METH_NOARGS|METH_COEXIST, 0},
   {0, 0, 0, 0}
 };
 
@@ -9777,7 +9931,7 @@ static PySequenceMethods __pyx_tp_as_sequence_VideoStream = {
 
 static PyMappingMethods __pyx_tp_as_mapping_VideoStream = {
   0, /*mp_length*/
-  __pyx_pw_7ffvideo_11VideoStream_29__getitem__, /*mp_subscript*/
+  __pyx_pw_7ffvideo_11VideoStream_31__getitem__, /*mp_subscript*/
   0, /*mp_ass_subscript*/
 };
 
@@ -9795,7 +9949,7 @@ static PyTypeObject __pyx_type_7ffvideo_VideoStream = {
   #else
   0, /*reserved*/
   #endif
-  __pyx_pw_7ffvideo_11VideoStream_31__repr__, /*tp_repr*/
+  __pyx_pw_7ffvideo_11VideoStream_33__repr__, /*tp_repr*/
   0, /*tp_as_number*/
   &__pyx_tp_as_sequence_VideoStream, /*tp_as_sequence*/
   &__pyx_tp_as_mapping_VideoStream, /*tp_as_mapping*/
@@ -9811,8 +9965,8 @@ static PyTypeObject __pyx_type_7ffvideo_VideoStream = {
   __pyx_tp_clear_7ffvideo_VideoStream, /*tp_clear*/
   0, /*tp_richcompare*/
   0, /*tp_weaklistoffset*/
-  __pyx_pw_7ffvideo_11VideoStream_25__iter__, /*tp_iter*/
-  __pyx_pw_7ffvideo_11VideoStream_27__next__, /*tp_iternext*/
+  __pyx_pw_7ffvideo_11VideoStream_27__iter__, /*tp_iter*/
+  __pyx_pw_7ffvideo_11VideoStream_29__next__, /*tp_iternext*/
   __pyx_methods_7ffvideo_VideoStream, /*tp_methods*/
   0, /*tp_members*/
   __pyx_getsets_7ffvideo_VideoStream, /*tp_getset*/
@@ -10064,7 +10218,9 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_s_VideoStream_s_4f, __pyx_k_VideoStream_s_4f, sizeof(__pyx_k_VideoStream_s_4f), 0, 0, 1, 0},
   {&__pyx_kp_s_Video_width_height_is_0_cannot_d, __pyx_k_Video_width_height_is_0_cannot_d, sizeof(__pyx_k_Video_width_height_is_0_cannot_d), 0, 0, 1, 0},
   {&__pyx_n_s_YUV420P, __pyx_k_YUV420P, sizeof(__pyx_k_YUV420P), 0, 0, 1, 1},
+  {&__pyx_kp_s_after_seek, __pyx_k_after_seek, sizeof(__pyx_k_after_seek), 0, 0, 1, 0},
   {&__pyx_n_s_array, __pyx_k_array, sizeof(__pyx_k_array), 0, 0, 1, 1},
+  {&__pyx_kp_s_before_seek, __pyx_k_before_seek, sizeof(__pyx_k_before_seek), 0, 0, 1, 0},
   {&__pyx_kp_s_both_width_and_height_cannot_be, __pyx_k_both_width_and_height_cannot_be, sizeof(__pyx_k_both_width_and_height_cannot_be), 0, 0, 1, 0},
   {&__pyx_n_s_buffer, __pyx_k_buffer, sizeof(__pyx_k_buffer), 0, 0, 1, 1},
   {&__pyx_kp_s_codec_ctx_frame_number_s, __pyx_k_codec_ctx_frame_number_s, sizeof(__pyx_k_codec_ctx_frame_number_s), 0, 0, 1, 0},
@@ -10102,6 +10258,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_numpy, __pyx_k_numpy, sizeof(__pyx_k_numpy), 0, 0, 1, 1},
   {&__pyx_n_s_prepare, __pyx_k_prepare, sizeof(__pyx_k_prepare), 0, 0, 1, 1},
   {&__pyx_n_s_print, __pyx_k_print, sizeof(__pyx_k_print), 0, 0, 1, 1},
+  {&__pyx_n_s_print_decode_next_frame, __pyx_k_print_decode_next_frame, sizeof(__pyx_k_print_decode_next_frame), 0, 0, 1, 1},
   {&__pyx_kp_s_pts_d_frameno_d, __pyx_k_pts_d_frameno_d, sizeof(__pyx_k_pts_d_frameno_d), 0, 0, 1, 0},
   {&__pyx_n_s_qualname, __pyx_k_qualname, sizeof(__pyx_k_qualname), 0, 0, 1, 1},
   {&__pyx_n_s_range, __pyx_k_range, sizeof(__pyx_k_range), 0, 0, 1, 1},
@@ -10272,14 +10429,14 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__16);
   __Pyx_GIVEREF(__pyx_tuple__16);
 
-  /* "ffvideo.pyx":631
+  /* "ffvideo.pyx":643
  *     def ndarray(self):
  *         if self.mode not in ('RGB', 'L'):
  *             raise FFVideoError('Cannot represent this color mode into PIL Image')             # <<<<<<<<<<<<<<
  * 
  *         return self.array
  */
-  __pyx_tuple__17 = PyTuple_Pack(1, __pyx_kp_s_Cannot_represent_this_color_mode); if (unlikely(!__pyx_tuple__17)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 631; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__17 = PyTuple_Pack(1, __pyx_kp_s_Cannot_represent_this_color_mode); if (unlikely(!__pyx_tuple__17)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 643; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__17);
   __Pyx_GIVEREF(__pyx_tuple__17);
 
@@ -10455,9 +10612,9 @@ PyMODINIT_FUNC PyInit_ffvideo(void)
   __pyx_type_7ffvideo_VideoStream.tp_print = 0;
   if (PyObject_SetAttrString(__pyx_m, "VideoStream", (PyObject *)&__pyx_type_7ffvideo_VideoStream) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 63; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_ptype_7ffvideo_VideoStream = &__pyx_type_7ffvideo_VideoStream;
-  if (PyType_Ready(&__pyx_type_7ffvideo_VideoFrame) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 583; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyType_Ready(&__pyx_type_7ffvideo_VideoFrame) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 595; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_type_7ffvideo_VideoFrame.tp_print = 0;
-  if (PyObject_SetAttrString(__pyx_m, "VideoFrame", (PyObject *)&__pyx_type_7ffvideo_VideoFrame) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 583; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyObject_SetAttrString(__pyx_m, "VideoFrame", (PyObject *)&__pyx_type_7ffvideo_VideoFrame) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 595; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_ptype_7ffvideo_VideoFrame = &__pyx_type_7ffvideo_VideoFrame;
   /*--- Type import code ---*/
   __pyx_ptype_7cpython_4type_type = __Pyx_ImportType(__Pyx_BUILTIN_MODULE_NAME, "type", 

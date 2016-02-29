@@ -505,6 +505,13 @@ cdef class VideoStream:
         return self.get_frame_at_pts(<int64_t>(timestamp * AV_TIME_BASE))
 
 
+    def print_decode_next_frame(self):
+        res = self.__decode_next_frame()
+        print res
+
+        return res
+
+
     def get_frame_at_pts(self, int64_t pts):
         cdef int ret
         cdef int64_t stream_pts
@@ -518,14 +525,15 @@ cdef class VideoStream:
         # AVSEEK_FLAG_ANY does not guarantee a keyframe is returned
         # but (IMPORTANT) it is the only flag that returns < 0 if seeked outside of
         # frame range of videos
+        print "before seek", pts
         ret = av_seek_frame(self.format_ctx, self.streamno, stream_pts, AVSEEK_FLAG_ANY)
+        print "after seek", ret
         if ret < 0:
             raise FFVideoError("Unable to seek: %d" % ret)
         # avcodec_flush_buffers(self.codec_ctx)
 
         # we have to seek again for frame accuracy and ensuring that a keyframe is decoded as well
         ret = av_seek_frame(self.format_ctx, self.streamno, stream_pts, self.seek_mode)
-        avcodec_flush_buffers(self.codec_ctx)
 
         # if we hurry it we can get bad frames later in the GOP
         # self.codec_ctx.skip_idct = AVDISCARD_BIDIR
@@ -537,11 +545,15 @@ cdef class VideoStream:
         # self.codec_ctx.hurry_up = 1
         hurried_frames = 0
         # self.__decode_next_frame()
-        while self.__decode_next_frame() < pts:
+        # while self.__decode_next_frame() < pts:
+        while self.print_decode_next_frame() < pts:
             if self.frame.pts < 0:
                 self.get_frame_at_pts(pts - av_rescale(1,
                                       self.stream.r_frame_rate.den*AV_TIME_BASE,
                                       self.stream.r_frame_rate.num))
+
+
+        avcodec_flush_buffers(self.codec_ctx)
 
         # self.codec_ctx.hurry_up = 0
 
